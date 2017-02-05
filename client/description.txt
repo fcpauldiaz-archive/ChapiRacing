@@ -1,0 +1,5 @@
+Esta carpeta tendrá todo lo se requiera de lado del cliente, lo cual consta:
+- Render
+- Request de data
+- Manejo de sesiones
+- Real-time management
