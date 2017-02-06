@@ -1,7 +1,7 @@
 var socket = io('http://localhost:4004');
 
 socket.on('onconnected', (data) => {
-    console.log(data.game);
+    console.log(data);
     player = new Player(data);
     console.log(player);
 });

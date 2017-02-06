@@ -44,13 +44,14 @@ const maxCons = 4;
 
 const getPlayerNumber = (before) => {
   if (before === undefined) return 1;
-  if (before == maxCons) {
+  if (before === maxCons) {
     return 1;
   }
   return before + 1;
 }
 
  const game_server = require('./server/server.js');
+ let playerNumber = undefined;
   //Socket.io will make connections
 
 io.sockets.on('connection', (client) => {
@@ -58,7 +59,9 @@ io.sockets.on('connection', (client) => {
   //Generate a new UUID
   //and store this on their socket/connection
   client.userid = UUID();
-  client.player = getPlayerNumber(client.player);
+  playerNumber = getPlayerNumber(playerNumber);
+  console.log(playerNumber);
+  client.player = playerNumber;
   game_server.findGame(client);
   console.log('\t socket.io:: player ' + client.userid + ' connected');
   //tell player he is connected with id
