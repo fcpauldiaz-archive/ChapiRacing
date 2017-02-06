@@ -8,7 +8,7 @@ import UUID from 'uuid';
 
 serverGame.createGame = function(player) {
   var actualGame = {
-    id : UUID(),                   //generate a new id for the game
+    id : UUID(),                          //generate a new id for the game
     players: [player.userid],             //list of players
     player_count: 1   
   };
