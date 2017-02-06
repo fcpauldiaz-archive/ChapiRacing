@@ -4,7 +4,7 @@
   "description": "Proyecto Redes UVG",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js --exec babel-node --presets es2015,stage-2",
+    "start": "nodemon *.js --exec babel-node --presets es2015,stage-2",
     "build": "babel lib -d dist",
     "serve": "node dist/app.js",
     "test": "mocha --compilers js:babel-register"
@@ -19,10 +19,13 @@
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-stage-2": "^6.11.0",
     "babel-register": "^6.11.6",
+    "express": "^4.14.1",
     "mocha": "^3.0.1",
     "nodemon": "^1.10.0",
-    "express": "^4.14.1",
-    "socket-io": "^1.0.0",
+    "socket.io": "^1.7.2",
     "uuid": "^3.0.1"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.22.0"
   }
 }
