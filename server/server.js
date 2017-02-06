@@ -21,12 +21,12 @@ serverGame.createGame = function(player) {
 
 serverGame.joinGame = function(i, player) {
   this.games[i].players.push(player.userid);
-  this.games[i].player_count =+ 1;
+  this.games[i].player_count++;
 }
 
 serverGame.leaveGame = function(i, player) {
   this.games[i].players.splice(player, 1);
-  this.games[i].player_count =- 1;
+  this.games[i].player_count--;
 }
 
 serverGame.findGame = function(player) {
@@ -34,11 +34,16 @@ serverGame.findGame = function(player) {
     this.createGame(player);
     return;
   }
+  let joined = false;
   for (let i = 0; i < this.games.length; i++) {
-    console.log(this.games[i]);
-    if (this.games[i].player_count <= 4) {
+    const count = this.games[i].player_count;
+    if (count <= 3) {
       this.joinGame(i, player);
+      joined = true;
     }
+  }
+  if (joined === false) {
+    this.createGame(player);
   }
 }
 
@@ -50,6 +55,10 @@ serverGame.endGame = function (playerId) {
         let player = game.players[j];
         if (player === playerId) {
           this.leaveGame(i, player);
+          if (game.player_count === 0) {
+            this.games.splice(game, 1);
+            this.game_count--;
+          }
         }
       }//end inner for
     }//end outer for
