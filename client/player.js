@@ -1,8 +1,10 @@
 function Player(data) {
   this.playerId = data.id;
-  this.playerNumber =  data.player,
-  this.playerTeam =  1,
-  this.playerPoints =  0
+  this.playerNumber =  data.player;
+  this.playerTeam =  1;
+  this.playerPoints =  0;
+  this.posx;
+  this.posy;
 
   Player.prototype.getPlayerNumber = function() {
     return this.playerNumber;
@@ -23,4 +25,15 @@ function Player(data) {
   Player.prototype.getPoints = function() {
     return this.playerPoints;
   };
+
+  Player.prototype.updatePos = function(x, y) {
+    this.posx = x;
+    this.posy = y;
+  }
+
+  Player.prototype.getPost = function() {
+    return {posx, posy};
+  }
 }
+ 
+module.exports = Player;
