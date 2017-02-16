@@ -17,11 +17,13 @@ serverGame.createGame = function(player) {
   this.games.push(actualGame);
   //Keep track
   this.game_count++;
+  return actualGame.id;
 }
 
 serverGame.joinGame = function(i, player) {
   this.games[i].players.push(player.userid);
   this.games[i].player_count++;
+  return this.games[i].id;
 }
 
 serverGame.leaveGame = function(i, player) {
@@ -30,21 +32,19 @@ serverGame.leaveGame = function(i, player) {
 }
 
 serverGame.findGame = function(player) {
+  //create first game
   if (this.game_count === 0) {
-    this.createGame(player);
-    return;
+    return this.createGame(player);
   }
-  let joined = false;
+  //find for an existing game
   for (let i = 0; i < this.games.length; i++) {
     const count = this.games[i].player_count;
     if (count <= 3) {
-      this.joinGame(i, player);
-      joined = true;
+      return this.joinGame(i, player);
     }
   }
-  if (joined === false) {
-    this.createGame(player);
-  }
+  //if all games are full
+  return this.createGame(player);
 }
 
 serverGame.endGame = function (playerId) {
@@ -63,4 +63,8 @@ serverGame.endGame = function (playerId) {
       }//end inner for
     }//end outer for
   } 
+}
+
+serverGame.updatePlayerPos = function(player) {
+
 }

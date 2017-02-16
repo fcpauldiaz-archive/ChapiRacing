@@ -36,4 +36,3 @@ function Player(data) {
   }
 }
  
-module.exports = Player;

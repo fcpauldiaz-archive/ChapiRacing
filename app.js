@@ -60,14 +60,18 @@ io.sockets.on('connection', (client) => {
   //and store this on their socket/connection
   client.userid = UUID();
   playerNumber = getPlayerNumber(playerNumber);
-  console.log(playerNumber);
   client.player = playerNumber;
-  game_server.findGame(client);
+  const game_id = game_server.findGame(client);
   console.log('\t socket.io:: player ' + client.userid + ' connected');
   //tell player he is connected with id
-  client.emit('onconnected', { id: client.userid, player: client.player, game: game_server } );
+  client.emit('onconnected', { 
+    id: client.userid, 
+    player: client.player, 
+    game: game_server,
+    game_id  
+  });
 
-  client.on('team-select', (team) => {
+  client.on('team-select', (player) => {
 
   })
 

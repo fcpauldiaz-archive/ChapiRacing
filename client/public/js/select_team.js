@@ -1,7 +1,10 @@
 var canvas = document.createElement("canvas");
 var ctx = canvas.getContext("2d");
+var socket = io('http://localhost:4004');
+
+
 canvas.width = 761;
-canvas.height = 960;
+canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
 // Background image
@@ -16,12 +19,12 @@ var actual_team = -1;
 var change_team = false;
 
 
-function ChapiRacing(user_id, game_id) {
+function ChapiRacing(user_player) {
 
 }
 
 var client = {
-    localplayer: 1,
+    localplayer: 2,
     players: [
         {
             number: 1,
@@ -48,9 +51,9 @@ var client = {
     speed: 700,
     game_id: 1
 }
+
 // var client = ChapiRacing(1, 1);
 var playerIndex = client.localplayer - 1;
-
 var keysDown = {};
 
 addEventListener("keydown", function (e) {
@@ -190,4 +193,10 @@ requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame
 // Let's play this game!
 var then = Date.now();
 // setUpScreen();
-main();
+socket.on('onconnected', (data) => {
+console.log(data)
+  client.localplayer = data.player;
+  playerIndex = client.localplayer - 1;
+
+  main();
+});
