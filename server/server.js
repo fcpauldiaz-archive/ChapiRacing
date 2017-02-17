@@ -3,48 +3,51 @@
  * Newton Labs
  * 5/02/2017
  */
+
 const serverGame = module.exports = { games: [], game_count:0 };
 import UUID from 'uuid';
+import Player from '../client/player';
 
-serverGame.createGame = function(player) {
+serverGame.createGame = function(playerId, playerNumber) {
   var actualGame = {
     id : UUID(),                          //generate a new id for the game
-    players: [player.userid],             //list of players
+    players: [new Player(playerId, playerNumber)],             //list of players
     player_count: 1   
   };
-
   //Store it in the list of game
   this.games.push(actualGame);
   //Keep track
   this.game_count++;
+  //return game id
   return actualGame.id;
 }
 
-serverGame.joinGame = function(i, player) {
-  this.games[i].players.push(player.userid);
+serverGame.joinGame = function(i, id, number) {
+  this.games[i].players.push(new Player(id, number));
   this.games[i].player_count++;
+  //return game id;
   return this.games[i].id;
 }
 
-serverGame.leaveGame = function(i, player) {
-  this.games[i].players.splice(player, 1);
+serverGame.leaveGame = function(i, indexPlayer) {
+  this.games[i].players.splice(indexPlayer, 1);
   this.games[i].player_count--;
 }
 
-serverGame.findGame = function(player) {
+serverGame.findGame = function(playerId, playerNumber) {
   //create first game
   if (this.game_count === 0) {
-    return this.createGame(player);
+    return this.createGame(playerId, playerNumber);
   }
   //find for an existing game
   for (let i = 0; i < this.games.length; i++) {
     const count = this.games[i].player_count;
     if (count <= 3) {
-      return this.joinGame(i, player);
+      return this.joinGame(i, playerId, playerNumber);
     }
   }
   //if all games are full
-  return this.createGame(player);
+  return this.createGame(playerId, playerNumber);
 }
 
 serverGame.endGame = function (playerId) {
@@ -53,7 +56,7 @@ serverGame.endGame = function (playerId) {
       let game = this.games[i];
       for (let j = 0; j < game.players.length; j++) {
         let player = game.players[j];
-        if (player === playerId) {
+        if (player.getPlayerId() === playerId) {
           this.leaveGame(i, player);
           if (game.player_count === 0) {
             this.games.splice(game, 1);

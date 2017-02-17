@@ -1,10 +1,14 @@
-function Player(data) {
-  this.playerId = data.id;
-  this.playerNumber =  data.player;
+var Player = function(id, player) {
+  this.playerId = id;
+  this.playerNumber =  player;
   this.playerTeam =  1;
   this.playerPoints =  0;
   this.posx;
   this.posy;
+
+  Player.prototype.getPlayerId = function() {
+    return this.playerId;
+  }
 
   Player.prototype.getPlayerNumber = function() {
     return this.playerNumber;
@@ -35,4 +39,5 @@ function Player(data) {
     return {posx, posy};
   }
 }
- 
+
+module.exports = Player;
