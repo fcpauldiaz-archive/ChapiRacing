@@ -2,6 +2,13 @@ var canvas = document.createElement("canvas");
 var ctx = canvas.getContext("2d");
 var socket = io('http://localhost:4004');
 
+var statsFPS = new Stats();
+var statsMS = new Stats();
+statsFPS.showPanel(0);
+statsMS.showPanel(1);
+ // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild( statsFPS.dom );
+document.body.appendChild( statsMS.dom );
 
 canvas.width = 761;
 canvas.height = window.innerHeight;
@@ -13,7 +20,7 @@ var bgImage = new Image();
 bgImage.onload = function () {
   bgReady = true;
 };
-bgImage.src = "images/mapa_inicial.jpg";
+bgImage.src = "client/public/images/mapa_inicial.jpg";
 
 var actual_team = -1;
 var change_team = false;
@@ -24,6 +31,8 @@ function ChapiRacing(user_player) {
 }
 
 var client = {
+    id: '',
+    game_id: '',
     localplayer: 2,
     players: [
         {
@@ -110,8 +119,8 @@ var update = function (modifier) {
     }
 
     if ((37 in keysDown || 39 in keysDown) && change_team) {
-        console.log(client);
-        change_team = false;
+      console.log(client);
+      change_team = false;
     }
 };
 
@@ -173,6 +182,9 @@ var setUpScreen = function() {
 
 // The main game loop
 var main = function () {
+     statsMS.begin();
+     statsFPS.begin();
+
     var now = Date.now();
     var delta = now - then;
 
@@ -181,8 +193,24 @@ var main = function () {
     render();
 
     then = now;
+     var player = client.players[playerIndex];
+       player.id = client.id;
+       player.game_id = client.game_id;
+       socket.on('updatePosition', (data) => {
+        for (let i = 0; i < data.players.length; i++) {
+            client.players[data.players[i].number-1] = data.players[i];
+        }
+       /* console.log(client.players);
+        console.log(documentata.players);*/
 
+      });
+        socket.emit('teamselect', { 
+            player
+        });
+    setTimeout(function(){}, 15000);
     // Request to do this again ASAP
+    statsMS.end();
+    statsFPS.end();
     requestAnimationFrame(main);
 };
 
@@ -194,9 +222,16 @@ requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame
 var then = Date.now();
 // setUpScreen();
 socket.on('onconnected', (data) => {
-console.log(data)
+  console.log(data)
   client.localplayer = data.player;
+  client.id = data.player_id;
+  client.game_id = data.game_id;
   playerIndex = client.localplayer - 1;
-
+   var player = client.players[playerIndex];
+   player.id = client.id;
+   player.game_id = client.game_id;
+   socket.emit('teamselect', { 
+        player
+    });
   main();
 });

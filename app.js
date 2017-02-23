@@ -23,7 +23,7 @@ app.get( '/', ( req, res ) => {
   if (debug) {
     console.log('loading %s', __dirname + '/index.html');
   }
-  res.sendFile( '/index.html' , { root:__dirname });
+  res.sendFile( '/client/public/select_team.html' , { root:__dirname });
 });
 
 
@@ -62,17 +62,23 @@ io.sockets.on('connection', (client) => {
   playerNumber = getPlayerNumber(playerNumber);
   client.player = playerNumber;
   const game_id = game_server.findGame(client.userid, playerNumber);
+  client.game_id = game_id;
   console.log('\t socket.io:: player ' + client.userid + ' connected');
   //tell player he is connected with id
   client.emit('onconnected', {  
     player: client.player, 
-    game: game_server,
-    game_id  
+    player_id: client.userid,
+    game_id
   });
 
-  client.on('team-select', (player) => {
-
+  client.on('teamselect', (player) => {
+    game_server.updatePlayerPosition(player.player);
+    client.emit('updatePosition', {
+     players: game_server.getPlayersPosition(client.game_id)
+    });
   })
+
+  
 
   // Add a disconnect listener
   client.on('disconnect', () => {

@@ -68,6 +68,34 @@ serverGame.endGame = function (playerId) {
   } 
 }
 
-serverGame.updatePlayerPos = function(player) {
+serverGame.updatePlayerPosition = function(playerUpdate) {
+  for (let i = 0; i < this.games.length; i++) {
+    let game = this.games[i];
+    for (let j = 0; j < game.players.length; j++) {
+      let player = game.players[j];
+      if (player.getPlayerId() === playerUpdate.id) {
+        player.updatePos(playerUpdate.x, playerUpdate.y);
+      }
+    }//end inner for
+  }//end outer for
+}
 
+serverGame.getPlayersPosition = function(game_id) {
+  let players = [];
+  for (let i = 0; i < this.games.length; i++) {
+    let game = this.games[i];
+    if (game.id === game_id) {
+      for (let j = 0; j < game.players.length; j++) {
+        let playerObj = new Object();
+        let player = game.players[j];
+        let pos = player.getPos();
+        playerObj.x = pos.x;
+        playerObj.y = pos.y;
+        playerObj.number = player.getPlayerNumber();
+        playerObj.team = -1;
+        players.push(playerObj);
+      }//end inner for
+    }// end if game_id
+  }//end outer for
+  return players;
 }

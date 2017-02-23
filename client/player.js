@@ -35,8 +35,8 @@ var Player = function(id, player) {
     this.posy = y;
   }
 
-  Player.prototype.getPost = function() {
-    return {posx, posy};
+  Player.prototype.getPos = function() {
+    return {x: this.posx, y: this.posy};
   }
 }
 
