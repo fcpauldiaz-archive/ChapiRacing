@@ -197,8 +197,6 @@ const main = () => {
 
     then = now;
     let player = client.players[playerIndex];
-    player.id = client.id;
-    player.game_id = client.game_id;
     //get players position
     socket.on('updatePosition', (data) => {
         updatePlayersPosition(data);
@@ -228,8 +226,6 @@ socket.on('onconnected', (data) => {
     client.game_id = data.game_id;
     playerIndex = client.localplayer - 1;
     let player = client.players[playerIndex];
-    player.id = client.id;
-    player.game_id = client.game_id;
     //initialize players position on server
     socket.emit('teamselect', { 
         player

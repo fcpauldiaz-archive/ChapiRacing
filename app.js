@@ -71,10 +71,10 @@ io.sockets.on('connection', (client) => {
     game_id
   });
 
-  client.on('teamselect', (player) => {
-    game_server.updatePlayerPosition(player.player);
+  client.on('teamselect', (data) => {
+    game_server.updatePlayerPosition(data.player, client.userid);
     client.emit('updatePosition', {
-     players: game_server.getPlayersPosition(client.game_id)
+     players: game_server.getPlayersPosition(client.game_id, client.userid)
     });
   })
 

@@ -68,13 +68,14 @@ serverGame.endGame = function (playerId) {
   } 
 }
 
-serverGame.updatePlayerPosition = function(playerUpdate) {
+serverGame.updatePlayerPosition = function(playerUpdate, user_id) {
   for (let i = 0; i < this.games.length; i++) {
     let game = this.games[i];
     for (let j = 0; j < game.players.length; j++) {
       let player = game.players[j];
-      if (player.getPlayerId() === playerUpdate.id) {
+      if (player.getPlayerId() === user_id) {
         player.updatePos(playerUpdate.x, playerUpdate.y);
+        player.setTeam(playerUpdate.team);
       }
     }//end inner for
   }//end outer for
@@ -93,7 +94,7 @@ serverGame.getPlayersPosition = function(game_id, user_id) {
           playerObj.x = pos.x;
           playerObj.y = pos.y;
           playerObj.number = player.getPlayerNumber();
-          playerObj.team = -1;
+          playerObj.team = player.getTeam();
           players.push(playerObj);
         }
       }//end inner for

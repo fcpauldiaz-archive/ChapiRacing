@@ -1,7 +1,7 @@
 var Player = function(id, player) {
   this.playerId = id;
   this.playerNumber =  player;
-  this.playerTeam =  1;
+  this.playerTeam =  -1;
   this.playerPoints =  0;
   this.posx;
   this.posy;
@@ -19,7 +19,7 @@ var Player = function(id, player) {
   };
 
   Player.prototype.setTeam = function(team) {
-    this.palyerTeam = team;
+    this.playerTeam = team;
   };
 
   Player.prototype.increasePoints = function() {
