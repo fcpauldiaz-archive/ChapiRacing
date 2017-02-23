@@ -1,14 +1,11 @@
-var canvas = document.createElement("canvas");
-var ctx = canvas.getContext("2d");
-var socket = io('http://localhost:4004');
+let canvas = document.createElement("canvas");
+let ctx = canvas.getContext("2d");
+const socket = io('http://localhost:4004');
 
-var statsFPS = new Stats();
-var statsMS = new Stats();
-statsFPS.showPanel(0);
-statsMS.showPanel(1);
+const stats = new Stats();
+stats.showPanel(0);
  // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild( statsFPS.dom );
-document.body.appendChild( statsMS.dom );
+document.body.appendChild( stats.dom );
 
 canvas.width = 761;
 canvas.height = window.innerHeight;
@@ -22,15 +19,15 @@ bgImage.onload = function () {
 };
 bgImage.src = "client/public/images/mapa_inicial.jpg";
 
-var actual_team = -1;
-var change_team = false;
+let actual_team = -1;
+let change_team = false;
 
 
 function ChapiRacing(user_player) {
 
 }
 
-var client = {
+let client = {
     id: '',
     game_id: '',
     localplayer: 2,
@@ -62,8 +59,8 @@ var client = {
 }
 
 // var client = ChapiRacing(1, 1);
-var playerIndex = client.localplayer - 1;
-var keysDown = {};
+let playerIndex = client.localplayer - 1;
+let keysDown = {};
 
 addEventListener("keydown", function (e) {
     keysDown[e.keyCode] = true;
@@ -75,7 +72,7 @@ addEventListener("keyup", function (e) {
 
 // Update: Funcion para tomar el movimiento atraves del teclado
 //      tiene como fin el seleccionar un equipo
-var update = function (modifier) {
+const update = (modifier) => {
     actual_team = client.players[playerIndex].team;
     // Left key
     if (37 in keysDown) {
@@ -125,7 +122,7 @@ var update = function (modifier) {
 };
 
 // Draw everything
-var render = function () {
+const render = () => {
     ctx.beginPath();
     ctx.arc(client.players[0].x,250,50,0,Math.PI*2);
     ctx.fillStyle="#E9465F";
@@ -164,7 +161,7 @@ var render = function () {
 };
 
 
-var setUpScreen = function() {
+const setUpScreen = () => {
     // Impresion del background
     if (bgReady) {
         ctx.drawImage(bgImage, 0, 0);
@@ -180,58 +177,62 @@ var setUpScreen = function() {
     ctx.fillText("Equipo 2", 555, 32);
 };
 
-// The main game loop
-var main = function () {
-     statsMS.begin();
-     statsFPS.begin();
+//update the other players position
+const updatePlayersPosition = (data) => {
+    for (let i = 0; i < data.players.length; i++) {
+        client.players[data.players[i].number-1] = data.players[i];
+    }
+}
 
-    var now = Date.now();
-    var delta = now - then;
+// The main game loop
+const main = () => {
+     stats.begin();
+
+    const now = Date.now();
+    const delta = now - then;
 
     update(delta / 1000);
     setUpScreen();
     render();
 
     then = now;
-     var player = client.players[playerIndex];
-       player.id = client.id;
-       player.game_id = client.game_id;
-       socket.on('updatePosition', (data) => {
-        for (let i = 0; i < data.players.length; i++) {
-            client.players[data.players[i].number-1] = data.players[i];
-        }
-       /* console.log(client.players);
-        console.log(documentata.players);*/
-
-      });
-        socket.emit('teamselect', { 
-            player
-        });
+    let player = client.players[playerIndex];
+    player.id = client.id;
+    player.game_id = client.game_id;
+    //get players position
+    socket.on('updatePosition', (data) => {
+        updatePlayersPosition(data);
+    });
+    //send client player position
+    socket.emit('teamselect', { 
+        player
+    });
     setTimeout(function(){}, 15000);
     // Request to do this again ASAP
-    statsMS.end();
-    statsFPS.end();
+    stats.end();
     requestAnimationFrame(main);
 };
 
 // Cross-browser support for requestAnimationFrame
-var w = window;
+const w = window;
 requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
 
 // Let's play this game!
-var then = Date.now();
-// setUpScreen();
+let then = Date.now();
+
+//connect to lobby
 socket.on('onconnected', (data) => {
-  console.log(data)
-  client.localplayer = data.player;
-  client.id = data.player_id;
-  client.game_id = data.game_id;
-  playerIndex = client.localplayer - 1;
-   var player = client.players[playerIndex];
-   player.id = client.id;
-   player.game_id = client.game_id;
-   socket.emit('teamselect', { 
+    console.log(data)
+    client.localplayer = data.player;
+    client.id = data.player_id;
+    client.game_id = data.game_id;
+    playerIndex = client.localplayer - 1;
+    let player = client.players[playerIndex];
+    player.id = client.id;
+    player.game_id = client.game_id;
+    //initialize players position on server
+    socket.emit('teamselect', { 
         player
     });
-  main();
+    main();
 });

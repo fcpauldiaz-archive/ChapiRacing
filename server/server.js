@@ -80,7 +80,7 @@ serverGame.updatePlayerPosition = function(playerUpdate) {
   }//end outer for
 }
 
-serverGame.getPlayersPosition = function(game_id) {
+serverGame.getPlayersPosition = function(game_id, user_id) {
   let players = [];
   for (let i = 0; i < this.games.length; i++) {
     let game = this.games[i];
@@ -88,12 +88,14 @@ serverGame.getPlayersPosition = function(game_id) {
       for (let j = 0; j < game.players.length; j++) {
         let playerObj = new Object();
         let player = game.players[j];
-        let pos = player.getPos();
-        playerObj.x = pos.x;
-        playerObj.y = pos.y;
-        playerObj.number = player.getPlayerNumber();
-        playerObj.team = -1;
-        players.push(playerObj);
+        if (player.getPlayerId() !== user_id) {
+          let pos = player.getPos();
+          playerObj.x = pos.x;
+          playerObj.y = pos.y;
+          playerObj.number = player.getPlayerNumber();
+          playerObj.team = -1;
+          players.push(playerObj);
+        }
       }//end inner for
     }// end if game_id
   }//end outer for
