@@ -22,19 +22,11 @@ bgImage.src = "client/public/images/mapa_inicial.jpg";
 let actual_team = -1;
 let change_team = false;
 
+let allowSelectTeam = true;
 
-function ChapiRacing(user_player) {
+let initialHeight = 0.25*(window.innerHeight);
+let stepHeight = (window.innerHeight - 0.30*window.innerHeight) / 4;
 
-}
-
-var initialHeight = 0.25*(window.innerHeight);
-var stepHeight = (window.innerHeight - 0.30*window.innerHeight) / 4;
-
-console.log('initialPos: ' + initialHeight + ' stepHeight' + stepHeight);
-console.log('1 pos: ' + initialHeight);
-console.log('3 pos: ' + (initialHeight + stepHeight*2));
-console.log('2 pos: ' + (initialHeight + stepHeight));
-console.log('4 pos: ' + (initialHeight + stepHeight*3));
 let client = {
     id: '',
     game_id: '',
@@ -43,34 +35,24 @@ let client = {
         {
             number: 1,
             team: -1,
-            x: 390,
-            // y: initialHeight
-            // y: 250
+            x: 390
         }, {
             number: 2,
             team: -1,
-            x: 390,
-            // y: (initialHeight + stepHeight)
-            // y: 400
+            x: 390
         }, {
             number: 3,
             team: -1,
-            x: 390,
-            // y: (initialHeight + stepHeight * 2)
-            // y: 550
+            x: 390
         }, {
             number: 4,
             team: -1,
-            x: 390,
-            // y: (initialHeight + stepHeight * 3)
-            // y: 700
+            x: 390
         }
     ],
-    speed: 700,
-    game_id: 1
+    speed: 700
 }
 
-// var client = ChapiRacing(1, 1);
 let playerIndex = client.localplayer - 1;
 let keysDown = {};
 
@@ -101,10 +83,29 @@ const setPosIfTeamFull = () => {
     }
 }
 
+const getPlayersWithoutTeam = () => {
+    const filterTeam = (e) => {
+        if (e.team === -1) {
+            return true;
+        }
+    }
+
+    let noTeam = client.players.filter(filterTeam);
+
+    return noTeam.length;
+}
+
 // Update: Funcion para tomar el movimiento atraves del teclado
 //      tiene como fin el seleccionar un equipo
 const update = (modifier) => {
     actual_team = client.players[playerIndex].team;
+    if (13 in keysDown && actual_team !== -1) {
+        allowSelectTeam = false;
+    }
+
+    if (!allowSelectTeam) {
+        return;
+    }
     // Left key
     if (37 in keysDown) {
         client.players[playerIndex].x -= client.speed * modifier;
@@ -250,6 +251,14 @@ const main = () => {
     socket.on('updatePosition', (data) => {
         updatePlayersPosition(data);
     });
+
+    document.getElementById("info").innerHTML = "Team: " + ((player.team === -1 ? 'No team' : player.team));
+    if (!allowSelectTeam) {
+        document.getElementById("stats").innerHTML = "Wait for other players" +
+            "\nPlayers left " + getPlayersWithoutTeam();
+    } else {
+        document.getElementById("stats").innerHTML = "Select a team!!";
+    }
     //send client player position
     socket.emit('teamselect', { 
         player
