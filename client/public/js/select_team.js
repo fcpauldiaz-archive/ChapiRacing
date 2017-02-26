@@ -27,6 +27,14 @@ function ChapiRacing(user_player) {
 
 }
 
+var initialHeight = 0.25*(window.innerHeight);
+var stepHeight = (window.innerHeight - 0.30*window.innerHeight) / 4;
+
+console.log('initialPos: ' + initialHeight + ' stepHeight' + stepHeight);
+console.log('1 pos: ' + initialHeight);
+console.log('3 pos: ' + (initialHeight + stepHeight*2));
+console.log('2 pos: ' + (initialHeight + stepHeight));
+console.log('4 pos: ' + (initialHeight + stepHeight*3));
 let client = {
     id: '',
     game_id: '',
@@ -36,22 +44,26 @@ let client = {
             number: 1,
             team: -1,
             x: 390,
-            y: 250
+            y: initialHeight
+            // y: 250
         }, {
             number: 2,
             team: -1,
             x: 390,
-            y: 400
+            y: (initialHeight + stepHeight)
+            // y: 400
         }, {
             number: 3,
             team: -1,
             x: 390,
-            y: 550
+            y: (initialHeight + stepHeight * 2)
+            // y: 550
         }, {
             number: 4,
             team: -1,
             x: 390,
-            y: 700
+            y: (initialHeight + stepHeight * 3)
+            // y: 700
         }
     ],
     speed: 700,
@@ -197,7 +209,7 @@ const main = () => {
 
     then = now;
     let player = client.players[playerIndex];
-    //get players position
+    // get players position
     socket.on('updatePosition', (data) => {
         updatePlayersPosition(data);
     });
