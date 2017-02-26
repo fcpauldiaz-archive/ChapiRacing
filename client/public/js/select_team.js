@@ -44,25 +44,25 @@ let client = {
             number: 1,
             team: -1,
             x: 390,
-            y: initialHeight
+            // y: initialHeight
             // y: 250
         }, {
             number: 2,
             team: -1,
             x: 390,
-            y: (initialHeight + stepHeight)
+            // y: (initialHeight + stepHeight)
             // y: 400
         }, {
             number: 3,
             team: -1,
             x: 390,
-            y: (initialHeight + stepHeight * 2)
+            // y: (initialHeight + stepHeight * 2)
             // y: 550
         }, {
             number: 4,
             team: -1,
             x: 390,
-            y: (initialHeight + stepHeight * 3)
+            // y: (initialHeight + stepHeight * 3)
             // y: 700
         }
     ],
@@ -82,6 +82,25 @@ addEventListener("keyup", function (e) {
     delete keysDown[e.keyCode];
 }, false);
 
+// Funcion que maneja la validación de cantidad de jugadores
+// por equipo
+const setPosIfTeamFull = () => {
+    let validation = validateTeamSize();
+    if (validation.firstTeamFull &&
+        client.players[playerIndex].team === -1 &&
+        client.players[playerIndex].x <= 301
+    ) {
+        client.players[playerIndex].x = 301;
+    }
+
+    if (validation.secondTeamFull &&
+        client.players[playerIndex].team === -1 &&
+        client.players[playerIndex].x >= 450
+    ) {
+        client.players[playerIndex].x = 450;
+    }
+}
+
 // Update: Funcion para tomar el movimiento atraves del teclado
 //      tiene como fin el seleccionar un equipo
 const update = (modifier) => {
@@ -89,6 +108,7 @@ const update = (modifier) => {
     // Left key
     if (37 in keysDown) {
         client.players[playerIndex].x -= client.speed * modifier;
+        setPosIfTeamFull();
         // Definimos el limite para que no se salga de la pantalla
         // a la izquierda
         if (client.players[playerIndex].x <= 70) {
@@ -98,9 +118,8 @@ const update = (modifier) => {
 
     // Right key
     if (39 in keysDown) {
-
         client.players[playerIndex].x += client.speed * modifier;
-
+        setPosIfTeamFull();
         if (client.players[playerIndex].x >= 685) {
             client.players[playerIndex].x = 685;
         }
@@ -133,43 +152,61 @@ const update = (modifier) => {
     }
 };
 
+const validateTeamSize = () => {
+    let evalTeam = 1;
+    const filterTeam = (e) => {
+        if (e.team === evalTeam) {
+            return true;
+        }
+    }
+
+    let team1members = client.players.filter(filterTeam);
+    evalTeam = 2;
+    let team2members = client.players.filter(filterTeam);
+
+    return {
+        'firstTeamFull': ((team1members.length === 2) ? true : false),
+        'secondTeamFull': ((team2members.length === 2) ? true : false)
+    }
+};
+
 // Draw everything
 const render = () => {
     ctx.beginPath();
-    ctx.arc(client.players[0].x,250,50,0,Math.PI*2);
+    ctx.arc(client.players[0].x,initialHeight,50,0,Math.PI*2);
     ctx.fillStyle="#E9465F";
     ctx.fill();
     ctx.fillStyle = "white";
     ctx.font = "bold 34px Arial";
     ctx.textAlign="center";
-    ctx.fillText(" J#1", client.players[0].x, 230);
+    ctx.fillText(" J#1", client.players[0].x, initialHeight - 20);
 
     ctx.beginPath();
-    ctx.arc(client.players[1].x,400,50,0,Math.PI*2);
+    ctx.arc(client.players[1].x,(initialHeight + stepHeight),50,0,Math.PI*2);
     ctx.fillStyle="#E9465F";
     ctx.fill();
     ctx.fillStyle = "white";
     ctx.font = "bold 34px Arial";
     ctx.textAlign="center";
-    ctx.fillText(" J#2", client.players[1].x, 380);
+    ctx.fillText(" J#2", client.players[1].x, (initialHeight + stepHeight) - 20);
 
     ctx.beginPath();
-    ctx.arc(client.players[2].x,550,50,0,Math.PI*2);
+    ctx.arc(client.players[2].x,(initialHeight + stepHeight*2),50,0,Math.PI*2);
     ctx.fillStyle="#E9465F";
     ctx.fill();
     ctx.fillStyle = "white";
     ctx.font = "bold 34px Arial";
     ctx.textAlign="center";
-    ctx.fillText(" J#3", client.players[2].x, 530);
+    ctx.fillText(" J#3", client.players[2].x, (initialHeight + stepHeight*2) - 20);
 
     ctx.beginPath();
-    ctx.arc(client.players[3].x,700,50,0,Math.PI*2);
+    ctx.arc(client.players[3].x,(initialHeight + stepHeight*3),50,0,Math.PI*2);
     ctx.fillStyle="#E9465F";
     ctx.fill();
     ctx.fillStyle = "white";
     ctx.font = "bold 34px Arial";
     ctx.textAlign="center";
-    ctx.fillText(" J#4", client.players[3].x, 680);
+    ctx.fillText(" J#4", client.players[3].x, (initialHeight + stepHeight*3) - 20);
 };
 
 
