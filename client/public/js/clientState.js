@@ -1,5 +1,4 @@
-const serverSocket = 'http://chapiracing.herokuapp.com' + process.env.PORT;
-const socket = io(serverSocket);
+const socket = io();
 
 let state = {
     actualState: 1,
