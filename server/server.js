@@ -76,6 +76,7 @@ serverGame.updatePlayerPosition = function(playerUpdate, user_id) {
       if (player.getPlayerId() === user_id) {
         player.updatePos(playerUpdate.x, playerUpdate.y);
         player.setTeam(playerUpdate.team);
+        player.setTeamSelected(playerUpdate.teamSelected);
       }
     }//end inner for
   }//end outer for
@@ -95,6 +96,7 @@ serverGame.getPlayersPosition = function(game_id, user_id) {
           playerObj.y = pos.y;
           playerObj.number = player.getPlayerNumber();
           playerObj.team = player.getTeam();
+          playerObj.teamSelected = player.getTeamSelected();
           players.push(playerObj);
         }
       }//end inner for

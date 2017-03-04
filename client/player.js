@@ -2,6 +2,7 @@ var Player = function(id, player) {
   this.playerId = id;
   this.playerNumber =  player;
   this.playerTeam =  -1;
+  this.teamSelected = false;
   this.playerPoints =  0;
   this.posx;
   this.posy;
@@ -38,6 +39,15 @@ var Player = function(id, player) {
   Player.prototype.getPos = function() {
     return {x: this.posx, y: this.posy};
   }
+
+  Player.prototype.setTeamSelected = function(selected) {
+    this.teamSelected = selected;
+  };
+
+  Player.prototype.getTeamSelected = function() {
+    return this.teamSelected;
+  }
+
 }
 
 module.exports = Player;
