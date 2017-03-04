@@ -1,7 +1,7 @@
-let changeState = false;
 let selectTeamState = (callback) => {
-
-    let canvas = document.createElement("canvas");
+    console.log('Select team JS file');
+    // let canvas = document.createElement("canvas");
+    let canvas = document.getElementById("canvas");
     let ctx = canvas.getContext("2d");
     // const socket = io('http://localhost:4004');
 
@@ -117,7 +117,7 @@ let selectTeamState = (callback) => {
     // Update: Funcion para tomar el movimiento atraves del teclado
     //      tiene como fin el seleccionar un equipo
     const update = (modifier) => {
-        console.log(client.players);
+        // console.log(client.players);
         actual_team = client.players[playerIndex].team;
         if (13 in keysDown && actual_team !== -1) {
             allowSelectTeam = false;
@@ -255,6 +255,7 @@ let selectTeamState = (callback) => {
         }
     }
 
+    let enableCallback = false;
     // The main game loop
     const main = () => {
          stats.begin();
@@ -280,6 +281,19 @@ let selectTeamState = (callback) => {
         } else {
             document.getElementById("stats").innerHTML = "Select a team!!";
         }
+
+        let playersNoTeam = getPlayersWithoutSelectedTeam();
+        
+        document.getElementById('debug').innerHTML = 'Player no team: ' + playersNoTeam;
+        if (playersNoTeam === 0) {
+            if (!enableCallback) {
+                console.log('Finish' + playersNoTeam);
+                callback(client);
+                enableCallback = true;
+                document.getElementById('canvas').remove();
+            }
+        }
+
         //send client player position
         socket.emit('teamselect', { 
             player
@@ -300,21 +314,14 @@ let selectTeamState = (callback) => {
     //connect to lobby
     // socket.on('onconnected', (data) => {
     let data = getState().client;
-    let playersNoTeam = getPlayersWithoutSelectedTeam();
-    if (playersNoTeam === 0) {
-        console.log('Finish' + playersNoTeam);
-        callback(client);
-    }
-    console.log(data);
+
     client.localplayer = data.localplayer;
     client.id = data.player_id;
     client.game_id = data.game_id;
     playerIndex = client.localplayer - 1;
-    console.log('Index: ' + playerIndex);
-    console.log('Client players');
-    console.log(client.players);
+
     let player = client.players[playerIndex];
-    console.log(player);
+    // console.log(player);
     //initialize players position on server
     socket.emit('teamselect', { 
         player

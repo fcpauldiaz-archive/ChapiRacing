@@ -43,13 +43,20 @@ socket.on('onconnected', (data) => {
     console.log(state.client);
 
     if (getCurrentState() === 1) {
+        console.log("lets select the team");
         selectTeamState(callback);
+    }
+
+    if (getCurrentState() === 2) {
+        console.log("lets play");
     }
 });
 
 const callback = (client) => {
     state.client = client;
     setState(2);
+    console.log('callback activated ' + state.actualStateString);
+    return;
 };
 
 // const selectTeam = () => {
