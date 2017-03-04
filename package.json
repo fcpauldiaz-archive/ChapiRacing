@@ -4,8 +4,8 @@
   "description": "Proyecto Redes UVG",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon *.js --exec babel-node --presets es2015,stage-2",
-    "build": "babel lib -d dist",
+    "start": "nodemon *.js --exec babel-node --presets es2015, stage-2",
+    "build": "babel client/client.js client/player.js server/server.js -d dist --copy-files",
     "serve": "node dist/app.js",
     "test": "mocha --compilers js:babel-register"
   },
