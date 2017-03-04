@@ -42,28 +42,32 @@ socket.on('onconnected', (data) => {
     state.client.game_id = data.game_id;
     console.log(state.client);
 
+    main();
+});
+
+const selectTeamCallback = (client) => {
+    state.client = client;
+    setState(2);
+    console.log('callback activated ' + state.actualStateString);
+    socket.emit('play', { 
+        play: true
+    });
+    main();
+};
+
+const playCallback = (data) => {
+    console.log(data);
+}
+
+const main = () => {
     if (getCurrentState() === 1) {
         console.log("lets select the team");
-        selectTeamState(callback);
+        selectTeamState(selectTeamCallback);
     }
 
     if (getCurrentState() === 2) {
         console.log("lets play");
+        document.getElementById('canvasContainer').innerHTML = '<canvas id="canvas"></canvas>';
+        playState(playCallback);
     }
-});
-
-const callback = (client) => {
-    state.client = client;
-    setState(2);
-    console.log('callback activated ' + state.actualStateString);
-    return;
-};
-
-// const selectTeam = () => {
-//     var gamedata = selectTeamState(callback);
-//     if (gamedata) {
-//         console.log('Ya terminaron de seleccionar equipos');
-//     }
-// };
-
-// selectTeam();
+}
