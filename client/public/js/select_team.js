@@ -329,3 +329,4 @@ let selectTeamState = (callback) => {
     main();
     // });
 };
+ window.addEventListener('resize', selectTeamState, false);
