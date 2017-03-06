@@ -10,10 +10,12 @@ import Player from '../client/player';
 import Game from './game_core';
 import FallingObject from '../client/fallingObject';
 
-serverGame.createGame = function(playerId, playerNumber) {
+
+
+serverGame.createGame = function(playerId) {
   const actualGame = new Game(
     UUID(), 
-    [new Player(playerId, playerNumber)],
+    [new Player(playerId, 1)],
     1
   );
   //Store it in the list of game
@@ -21,33 +23,36 @@ serverGame.createGame = function(playerId, playerNumber) {
   //Keep track
   this.game_count++;
   //return game id
-  return actualGame.getId();
+  return { game_id: actualGame.getId(), player_number:1};
 }
 
-serverGame.joinGame = function(i, id, number) {
-  this.games[i].addPlayer(id, number);
+serverGame.joinGame = function(i, id) {
+  this.games[i].addPlayer(id);
   //return game id;
-  return this.games[i].getId();
+  return { 
+    game_id: this.games[i].getId(),
+    player_number: this.games[i].getPlayerCount()
+  }; 
 }
 
 serverGame.leaveGame = function(i, indexPlayer) {
   this.games[i].removePlayer(indexPlayer);
 }
 
-serverGame.findGame = function(playerId, playerNumber) {
+serverGame.findGame = function(playerId) {
   //create first game
   if (this.game_count === 0) {
-    return this.createGame(playerId, playerNumber);
+    return this.createGame(playerId);
   }
   //find for an existing game
   for (let i = 0; i < this.games.length; i++) {
     const count = this.games[i].getPlayerCount();
     if (count <= 3) {
-      return this.joinGame(i, playerId, playerNumber);
+      return this.joinGame(i, playerId);
     }
   }
   //if all games are full
-  return this.createGame(playerId, playerNumber);
+  return this.createGame(playerId);
 }
 
 serverGame.endGame = function (playerId) {

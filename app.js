@@ -42,16 +42,9 @@ app.get( '/*' , ( req, res, next ) => {
 const io = socket.listen(server);
 const maxCons = 4;
 
-const getPlayerNumber = (before) => {
-  if (before === undefined) return 1;
-  if (before === maxCons) {
-    return 1;
-  }
-  return before + 1;
-}
 
- const game_server = require('./server/server.js');
- let playerNumber = undefined;
+const game_server = require('./server/server.js');
+ //let playerNumber = undefined;
   //Socket.io will make connections
 
 io.sockets.on('connection', (client) => {
@@ -59,14 +52,14 @@ io.sockets.on('connection', (client) => {
   //Generate a new UUID
   //and store this on their socket/connection
   client.userid = UUID();
-  playerNumber = getPlayerNumber(playerNumber);
-  client.player = playerNumber;
-  const game_id = game_server.findGame(client.userid, playerNumber);
+  //playerNumber = getPlayerNumber(playerNumber);
+  //client.player = playerNumber;
+  const {game_id, player_number} = game_server.findGame(client.userid);
   client.game_id = game_id;
   console.log('\t socket.io:: player ' + client.userid + ' connected');
   //tell player he is connected with id
   client.emit('onconnected', {  
-    player: client.player, 
+    player: player_number, 
     player_id: client.userid,
     game_id
   });
@@ -76,8 +69,7 @@ io.sockets.on('connection', (client) => {
     client.emit('updatePosition', {
      players: game_server.getPlayersPosition(client.game_id, client.userid)
     });
-  })
-
+  });
   
 
   // Add a disconnect listener
