@@ -11,7 +11,8 @@ const playState = (callback) => {
     bgImage.onload = function () {
       bgReady = true;
     };
-    bgImage.src = "client/public/images/mapa.jpg";
+    // bgImage.src = "client/public/images/mapa.jpg";
+    bgImage.src = "images/mapa.jpg";
 
     // Team 1 car image
     var team1CarReady = false;
@@ -19,7 +20,8 @@ const playState = (callback) => {
     team1CarImage.onload = function () {
       team1CarReady = true;
     };
-    team1CarImage.src = "client/public/images/blue_car.jpeg";
+    // team1CarImage.src = "client/public/images/blue_car.jpeg";
+    team1CarImage.src = "images/blue_car.jpeg";
 
     // Team 2 car image
     var team2CarReady = false;
@@ -27,7 +29,55 @@ const playState = (callback) => {
     team2CarImage.onload = function () {
       team2CarReady = true;
     };
-    team2CarImage.src = "client/public/images/red_car.jpeg";
+    // team2CarImage.src = "client/public/images/red_car.jpeg";
+    team2CarImage.src = "images/green_car.png";
+
+    // Team 2 car image
+    var bomber1Ready = false;
+    var bomber1Image = new Image();
+    bomber1Image.onload = function () {
+      bomber1Ready = true;
+    };
+    // bomber1Image.src = "client/public/images/red_car.jpeg";
+    bomber1Image.src = "images/bomber.png";
+
+    // Team 2 car image
+    var bomber2Ready = false;
+    var bomber2Image = new Image();
+    bomber2Image.onload = function () {
+      bomber2Ready = true;
+    };
+    // bomber2Image.src = "client/public/images/red_car.jpeg";
+    bomber2Image.src = "images/bomber2.png";
+
+    let initialHeight = 0.05*(window.innerHeight);
+    // let stepHeight = (window.innerHeight - 0.30*window.innerHeight) / 4;
+    let carYPosition = (window.innerHeight - 0.18*window.innerHeight)
+
+    let client = {
+        team1: {
+            bomber: {
+                playerNumber: 0,
+                x: 0
+            },
+            driver: {
+                playerNumber: 0,
+                x: 0
+            },
+            points: 0
+        },
+        team2: {
+            bomber: {
+                playerNumber: 0,
+                x: 0
+            },
+            driver: {
+                playerNumber: 0,
+                x: 0
+            },
+            points: 0
+        }
+    };
 
     var keysDown = {};
     // Team1 - car attributes
@@ -52,11 +102,11 @@ const playState = (callback) => {
 
     var setUpGame = function () {
         team1Car.x = 65;
-        team1Car.y = canvas.height - 150;
+        team1Car.y = carYPosition;
 
         // Throw the monster somewhere on the screen randomly
         team2Car.x = 450;
-        team2Car.y = canvas.height - 150;
+        team2Car.y = carYPosition;
     };
 
     // Update game objects
@@ -105,6 +155,14 @@ const playState = (callback) => {
             ctx.drawImage(team2CarImage, team2Car.x, team2Car.y);
         }
 
+        if (bomber1Ready) {
+            ctx.drawImage(bomber1Image, team2Car.x, initialHeight)
+        }
+
+        if (bomber2Ready) {
+            ctx.drawImage(bomber2Image, team1Car.x, initialHeight)
+        }
+
         // Draw a square
         ctx.beginPath();
         ctx.fillStyle="#00A8C1";
@@ -149,3 +207,4 @@ const playState = (callback) => {
     setUpGame();
     main();
 }
+playState();
