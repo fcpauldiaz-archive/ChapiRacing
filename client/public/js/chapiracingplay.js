@@ -11,8 +11,8 @@ const playState = (callback) => {
     bgImage.onload = function () {
       bgReady = true;
     };
-    // bgImage.src = "client/public/images/mapa.jpg";
-    bgImage.src = "images/mapa.jpg";
+    bgImage.src = "client/public/images/mapa.jpg";
+    //bgImage.src = "images/mapa.jpg";
 
     // Team 1 car image
     var team1CarReady = false;
@@ -20,8 +20,8 @@ const playState = (callback) => {
     team1CarImage.onload = function () {
       team1CarReady = true;
     };
-    // team1CarImage.src = "client/public/images/blue_car.jpeg";
-    team1CarImage.src = "images/blue_car.jpeg";
+    team1CarImage.src = "client/public/images/blue_car.jpeg";
+    //team1CarImage.src = "images/blue_car.jpeg";
 
     // Team 2 car image
     var team2CarReady = false;
@@ -29,8 +29,8 @@ const playState = (callback) => {
     team2CarImage.onload = function () {
       team2CarReady = true;
     };
-    // team2CarImage.src = "client/public/images/red_car.jpeg";
-    team2CarImage.src = "images/green_car.png";
+    team2CarImage.src = "client/public/images/red_car.jpeg";
+    //team2CarImage.src = "images/green_car.png";
 
     // Team 2 car image
     var bomber1Ready = false;
@@ -38,8 +38,8 @@ const playState = (callback) => {
     bomber1Image.onload = function () {
       bomber1Ready = true;
     };
-    // bomber1Image.src = "client/public/images/red_car.jpeg";
-    bomber1Image.src = "images/bomber.png";
+    bomber1Image.src = "client/public/images/red_car.jpeg";
+    //bomber1Image.src = "images/bomber.png";
 
     // Team 2 car image
     var bomber2Ready = false;
@@ -47,8 +47,8 @@ const playState = (callback) => {
     bomber2Image.onload = function () {
       bomber2Ready = true;
     };
-    // bomber2Image.src = "client/public/images/red_car.jpeg";
-    bomber2Image.src = "images/bomber2.png";
+    bomber2Image.src = "client/public/images/red_car.jpeg";
+    //bomber2Image.src = "images/bomber2.png";
 
     let initialHeight = 0.05*(window.innerHeight);
     // let stepHeight = (window.innerHeight - 0.30*window.innerHeight) / 4;

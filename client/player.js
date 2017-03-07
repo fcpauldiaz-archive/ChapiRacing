@@ -1,7 +1,8 @@
 export default class Player  {
-  constructor(id) {
+  constructor(id, number) {
+     console.log(number, 'player number');
     this.playerId = id;
-    this.playerNumber++;
+    this.playerNumber = number;
     this.playerTeam =  -1;
     this.teamSelected = false;
     this.playerPoints =  0;

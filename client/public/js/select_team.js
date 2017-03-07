@@ -316,12 +316,12 @@ let selectTeamState = (callback) => {
     let data = getState().client;
 
     client.localplayer = data.localplayer;
-    client.id = data.player_id;
+    client.id = data.id;
     client.game_id = data.game_id;
     playerIndex = client.localplayer - 1;
 
     let player = client.players[playerIndex];
-    // console.log(player);
+    //console.log(player);
     //initialize players position on server
     socket.emit('teamselect', { 
         player

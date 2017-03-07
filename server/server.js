@@ -23,15 +23,15 @@ serverGame.createGame = function(playerId) {
   //Keep track
   this.game_count++;
   //return game id
-  return { game_id: actualGame.getId(), player_number:1};
+  return { game_id: actualGame.getId(), player_number:1 };
 }
 
 serverGame.joinGame = function(i, id) {
-  this.games[i].addPlayer(id);
+  const player_number = this.games[i].addPlayer(id);
   //return game id;
   return { 
     game_id: this.games[i].getId(),
-    player_number: this.games[i].getPlayerCount()
+    player_number
   }; 
 }
 
@@ -62,9 +62,9 @@ serverGame.endGame = function (playerId) {
       for (let j = 0; j < game.getPlayers().length; j++) {
         let player = game.findPlayer(j);
         if (player.getPlayerId() === playerId) {
-          this.leaveGame(i, player);
-          if (game.player_count === 0) {
-            this.games.splice(game, 1);
+          this.leaveGame(i, player.getPlayerNumber()-1);
+          if (game.getPlayerCount() === 0) {
+            this.games.splice(i, 1);
             this.game_count--;
           }
         }
@@ -78,6 +78,7 @@ serverGame.updatePlayerPosition = function(playerUpdate, user_id) {
     let game = this.games[i];
     for (let j = 0; j < game.getPlayers().length; j++) {
       let player = game.findPlayer(j);
+      //console.log(player);
       if (player.getPlayerId() === user_id) {
         player.updatePos(playerUpdate.x, playerUpdate.y);
         player.setTeam(playerUpdate.team);

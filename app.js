@@ -54,7 +54,7 @@ io.sockets.on('connection', (client) => {
   client.userid = UUID();
   //playerNumber = getPlayerNumber(playerNumber);
   //client.player = playerNumber;
-  const {game_id, player_number} = game_server.findGame(client.userid);
+  const { game_id, player_number } = game_server.findGame(client.userid);
   client.game_id = game_id;
   console.log('\t socket.io:: player ' + client.userid + ' connected');
   //tell player he is connected with id
@@ -63,19 +63,27 @@ io.sockets.on('connection', (client) => {
     player_id: client.userid,
     game_id
   });
-
+  //when player moves on team select
   client.on('teamselect', (data) => {
     game_server.updatePlayerPosition(data.player, client.userid);
     client.emit('updatePosition', {
      players: game_server.getPlayersPosition(client.game_id, client.userid)
     });
   });
+
+  /*client.on('updateObject', (data) => {
+    game_server.updateObjectPosition(client.game_id);
+    client.emit('sendPosition', {
+      fallingObjects: game_server.
+    })
+  });*/
   
 
   // Add a disconnect listener
   client.on('disconnect', () => {
     console.log('client disconnected ' + client.userid);
     game_server.endGame(client.userid);
+    console.log(game_server.games);
   });
 
 }); //client.on 
