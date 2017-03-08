@@ -1,3 +1,5 @@
+
+let enableCallback = false;
 let selectTeamState = (callback) => {
     console.log('Select team JS file');
     // let canvas = document.createElement("canvas");
@@ -255,7 +257,6 @@ let selectTeamState = (callback) => {
         }
     }
 
-    let enableCallback = false;
     // The main game loop
     const main = () => {
          stats.begin();

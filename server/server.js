@@ -160,7 +160,7 @@ serverGame.sendNewState = function(game_id, player_id) {
       console.log('entra1');
       for (let j = 0; j < players.length; j++) {
         let player = players[j];
-        if (player.getId() === player_id) {
+        if (player.getPlayerId() === player_id) {
           console.log('entra');
           let client = {
             id: player_id,
@@ -170,28 +170,28 @@ serverGame.sendNewState = function(game_id, player_id) {
                 {
                     number: 1,
                     team: players[0].getTeam(),
-                    type: game.getPlayerType(players[0].getId()),
+                    type: game.getPlayerType(players[0].getPlayerId()),
                     x: players[0].getInitialX(),
                     teamSelected: true,
                     points: 0
                 }, {
                     number: 2,
                     team: players[1].getTeam(),
-                    type: game.getPlayerType(players[1].getId()),
+                    type: game.getPlayerType(players[1].getPlayerId()),
                     x: players[1].getInitialX(),
-                    teamSelected: false,
+                    teamSelected: true,
                     points: 0
                 }, {
                     number: 3,
                     team: players[2].getTeam(),
-                    type: game.getPlayerType(players[2].getId()),
+                    type: game.getPlayerType(players[2].getPlayerId()),
                     x: players[2].getInitialX(),
                     teamSelected: true,
                     points: 0
                 }, {
                     number: 4,
                     team: players[3].getTeam(),
-                    type: game.getPlayerType(players[3].getId()),
+                    type: game.getPlayerType(players[3].getPlayerId()),
                     x: players[3].getInitialX(),
                     teamSelected: true,
                     points: 0
@@ -199,10 +199,10 @@ serverGame.sendNewState = function(game_id, player_id) {
             ],
             speed: 700
           };
+          game.restorePlayers();
+          console.log(client);
+          return client;
         }
-        game.restorePlayers();
-        console.log(client);
-        return client;
       }
       
     }

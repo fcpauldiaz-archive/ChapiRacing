@@ -74,7 +74,12 @@ const main = () => {
         document.getElementById('canvasContainer').innerHTML = '<canvas id="canvas"></canvas>';
         socket.on('getNewState', (data) =>  {
             setNewClient(data);
+            console.log(data);
         });
+
+        socket.emit('requestState', {});
+        // console.log('newState');
+        // console.log(getState().client);
         playState(playCallback);
     }
 }

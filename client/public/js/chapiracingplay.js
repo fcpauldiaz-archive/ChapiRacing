@@ -28,7 +28,7 @@ const calcCollition = (player, object) => {
 
 let firstTime = true;
 let firstRender = true;
-const playState = (callback) => {
+const playState = (callbackPlay) => {
     let canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
     canvas.width = 761;
@@ -59,7 +59,7 @@ const playState = (callback) => {
     team2CarImage.onload = function () {
       team2CarReady = true;
     };
-    team2CarImage.src = "client/public/images/red_car.jpeg";
+    team2CarImage.src = "client/public/images/green_car.png";
     //team2CarImage.src = "images/green_car.png";
 
     // Team 2 car image
@@ -203,104 +203,29 @@ const playState = (callback) => {
     // Draw everything
     var render = function () {
         let team1Car = {
-            x: client.players[indexPlayersToDraw.team1.runner].x,
-            y: client.players[indexPlayersToDraw.team1.runner].y
+            x: client.players[indexPlayersToDraw.team1.runner].x
         };
 
         let team2Car = {
-            x: client.players[indexPlayersToDraw.team2.runner].x,
-            y: client.players[indexPlayersToDraw.team2.runner].y
+            x: client.players[indexPlayersToDraw.team2.runner].x
         };
 
         let team1Bomber = {
-            x: client.players[indexPlayersToDraw.team1.bomber].x,
-            y: client.players[indexPlayersToDraw.team1.bomber].y
+            x: client.players[indexPlayersToDraw.team1.bomber].x
         };
 
         let team2Bomber = {
-            x: client.players[indexPlayersToDraw.team2.bomber].x,
-            y: client.players[indexPlayersToDraw.team2.bomber].y
+            x: client.players[indexPlayersToDraw.team2.bomber].x
         };
 
-        if (firstRender) {
-            client.players[indexPlayersToDraw.team1.runner].x = 65;
-            client.players[indexPlayersToDraw.team1.runner].y = carYPosition;
-
-            client.players[indexPlayersToDraw.team2.runner].x = 450;
-            client.players[indexPlayersToDraw.team2.runner].y = carYPosition;
-
-            client.players[indexPlayersToDraw.team1.bomber].x = 55;
-            client.players[indexPlayersToDraw.team1.bomber].y = initialHeight;
-
-            client.players[indexPlayersToDraw.team2.bomber].x = 440;
-            client.players[indexPlayersToDraw.team2.bomber].y = initialHeight;
-            console.log(client.players);
-
-            let team1Car = {
-                x: 65,
-                y: carYPosition
-            };
-
-            let team2Car = {
-                x: 450,
-                y: carYPosition
-            };
-
-            let team1Bomber = {
-                x: 55,
-                y: initialHeight
-            };
-
-            let team2Bomber = {
-                x: 440,
-                y: initialHeight
-            };
-            firstRender = false;
-            console.log(team1Car);
-            console.log(team2Car);
-            console.log(team1Bomber);
-            console.log(team2Bomber);
-        }
         if (bgReady) {
             ctx.drawImage(bgImage, 0, 0);
         }
 
-        // if (team1CarReady) {
-        //     ctx.drawImage(
-        //         team1CarImage,
-        //         team1Car.x,
-        //         team1Car.y
-        //     );
-        // }
-
-        // if (team2CarReady) {
-        //     ctx.drawImage(
-        //         team2CarImage,
-        //         team2Car.x,
-        //         team2Car.y
-        //     );
-        // }
-
-        // if (bomber1Ready) {
-        //     ctx.drawImage(
-        //         bomber1Image,
-        //         team1Bomber.x,
-        //         team1Bomber.y
-        //     );
-        // }
-
-        // if (bomber2Ready) {
-        //     ctx.drawImage(
-        //         bomber2Image,
-        //         team2Bomber.x,
-        //         team2Bomber.y
-        //     );
-        // }
-
         if (team1CarReady) {
             ctx.drawImage(
                 team1CarImage,
-                65,
+                team1Car.x,
                 carYPosition
             );
         }
@@ -308,7 +233,7 @@ const playState = (callback) => {
         if (team2CarReady) {
             ctx.drawImage(
                 team2CarImage,
-                450,
+                team2Car.x,
                 carYPosition
             );
         }
@@ -316,7 +241,7 @@ const playState = (callback) => {
         if (bomber1Ready) {
             ctx.drawImage(
                 bomber1Image,
-                55,
+                team1Bomber.x,
                 initialHeight
             );
         }
@@ -324,7 +249,7 @@ const playState = (callback) => {
         if (bomber2Ready) {
             ctx.drawImage(
                 bomber2Image,
-                440,
+                team2Bomber.x,
                 initialHeight
             );
         }
@@ -354,11 +279,13 @@ const playState = (callback) => {
         for (let i = 0; i < data.players.length; i++) {
             client.players[data.players[i].number-1] = data.players[i];
         }
+        // console.log(client.players);
         calculatePlayersIndexToRender();
     }
 
     // The main game loop
-    var main = function () {
+    let mainPlayGame = function () {
+        // console.log(client.players);
         var now = Date.now();
         var delta = now - then;
 
@@ -379,7 +306,7 @@ const playState = (callback) => {
          });
         setTimeout(function(){}, 15000);
         // Request to do this again ASAP
-        requestAnimationFrame(main);
+        requestAnimationFrame(mainPlayGame);
     };
 
     // Cross-browser support for requestAnimationFrame
@@ -392,6 +319,7 @@ const playState = (callback) => {
     //connect to lobby
     // socket.on('onconnected', (data) => {
     let data = getState().client;
+    console.log(data);
 
     client.localplayer = data.localplayer;
     client.id = data.id;
@@ -399,10 +327,12 @@ const playState = (callback) => {
     playerIndex = client.localplayer - 1;
 
     if (firstTime) {
-        client.players[playerIndex] = data.players[playerIndex];
-        client.players[playerIndex].number = data.players[playerIndex].number;
-        client.players[playerIndex].team = data.players[playerIndex].team;
+        client.players = data.players;
+        // client.players[playerIndex].number = data.players[playerIndex].number;
+        // client.players[playerIndex].team = data.players[playerIndex].team;
         firstTime = false;
+        console.log('Client actual');
+        console.log(client.players);
     }
 
     let player = client.players[playerIndex];
@@ -410,8 +340,9 @@ const playState = (callback) => {
     //initialize players position on server
     socket.on('sendPlayerType', (data) =>  {
         client.players[playerIndex].type = data.type;
-    })
+    });
     calculatePlayersIndexToRender();
+
     socket.emit('getPlayerType', {});
-    main();
+    mainPlayGame();
 }
