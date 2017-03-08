@@ -57,13 +57,13 @@ export default class Player  {
   }
 
   getInitialX() {
-    if (this.team === 1 && type === 'car') {
+    if (this.team === 1 && this.type === 'car') {
       return 65;
     }
-    else if (this.team === 2 && type === 'car') { //team 2 car
+    else if (this.team === 2 && this.type === 'car') { //team 2 car
       return 450;
     }
-    else if (this.team === 1 && type === 'bomber') {
+    else if (this.team === 1 && this.type === 'bomber') {
       return 55;
     }
     else { //team === 2 && type === 'bomber'
