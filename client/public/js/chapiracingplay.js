@@ -213,10 +213,6 @@ const playState = (callbackPlay) => {
                     bulletOrCoin.type = 'coin';
                 }
                 bulletOrCoin.image = newImage;
-<<<<<<< HEAD
-=======
-
->>>>>>> 8fcf7d3e9c8c066ed5fbc35cbc64f8c6caea422b
                 client.bulletsOrCoins.push(bulletOrCoin);
                 actualDate = updateDate;
                 //send object to server to broadcast
@@ -336,6 +332,25 @@ const playState = (callbackPlay) => {
         calculatePlayersIndexToRender();
     }
 
+    const addBulletsOrCoins = (data) => {
+        let actualBOCid = '';
+        const filterBullet = (e) => {
+            // console.log('compare: ' + e.id + ' to ' + actualBOCid);
+            if (e.id === actualBOCid) {
+                return true;
+            }
+        };
+        data.forEach((bulletOrCoin) => {
+            actualBOCid = bulletOrCoin.id;
+            let find = client.bulletsOrCoins.filter(filterBullet);
+            // console.log(find);
+            let isIn = (find.length >= 1) ? true : false;
+            if (!isIn) {
+                client.bulletsOrCoins.push(bulletOrCoin);
+            }
+        });
+    };
+
     // The main game loop
     let mainPlayGame = function () {
         // console.log(client.players);
@@ -358,7 +373,9 @@ const playState = (callbackPlay) => {
 
          //receive objects
         socket.on('broadCastObject', (data) => {
+            console.log('Get coins or bullets');
             console.log(data);
+            addBulletsOrCoins(data.objects);
         });
 
         setTimeout(function(){}, 15000);
