@@ -275,14 +275,14 @@ const playState = (callback) => {
         then = now;
         let player = client.players[playerIndex];
         // get players position
-        // socket.on('updatePosition', (data) => {
-        //     updatePlayersPosition(data);
-        // });
+        socket.on('receiveUpdate', (data) => {
+             updatePlayersPosition(data);
+        });
 
         //send client player position
-        // socket.emit('teamselect', { 
-        //     player
-        // });
+         socket.emit('playerUpdate', { 
+            player
+         });
         setTimeout(function(){}, 15000);
         // Request to do this again ASAP
         requestAnimationFrame(main);
@@ -314,9 +314,9 @@ const playState = (callback) => {
     let player = client.players[playerIndex];
     //console.log(player);
     //initialize players position on server
-    // socket.emit('teamselect', { 
-    //     player
-    // });
+    socket.on('sendPlayerType', (data) =>  {
+        client.players[playerIndex].type = data.type;
+    })
+    socket.emit('getPlayerType', {});
     main();
 }
-playState();
