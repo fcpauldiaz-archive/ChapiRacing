@@ -13,6 +13,10 @@ const getCurrentState = () => {
     return state.actualState;
 };
 
+const setNewClient = (newClient) => {
+    state.client = newClient;
+}
+
 const setState = (actualState) => {
     let stateString = '';
     switch(actualState){
@@ -68,6 +72,9 @@ const main = () => {
     if (getCurrentState() === 2) {
         console.log("lets play");
         document.getElementById('canvasContainer').innerHTML = '<canvas id="canvas"></canvas>';
+        socket.on('getNewState', (data) =>  {
+            setNewClient(data);
+        });
         playState(playCallback);
     }
 }
