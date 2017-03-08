@@ -192,29 +192,31 @@ const playState = (callbackPlay) => {
         }
 
         //space bar or enter
-        if (32 in keysDown || 13 in keysDown) {
+        if ((32 in keysDown || 13 in keysDown) && !isRunner) {
             console.log( Math.abs(updateDate.getSeconds() - actualDate.getSeconds()));
             if ( Math.abs(updateDate.getSeconds() - actualDate.getSeconds()) > 2) {
                 let newImage = new Image();
                 const random = Math.random();
-                let bulletOrCoin = {
+                const bulletOrCoin = {
                     x: client.players[playerIndex].x,
                     y: initialHeight,
-                    id: uuid.v4()
+                    image: newImage
                 }
                 //draw bullet
                 if (random >= 0.5) {
-                    newImage.src = "client/public/images/bomb.png";
+                    newImage.src = "client/public/images/bombSmall.png";
                     bulletOrCoin.type = 'bullet';
                 }  
                 //draw coin
                 if (random < 0.5) {
-                    newImage.src = "client/public/images/coin.png";
-                    newImage.height = 80;
-                    newImage.width = 80;
+                    newImage.src = "client/public/images/coinSmall.png";
                     bulletOrCoin.type = 'coin';
                 }
                 bulletOrCoin.image = newImage;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8fcf7d3e9c8c066ed5fbc35cbc64f8c6caea422b
                 client.bulletsOrCoins.push(bulletOrCoin);
                 actualDate = updateDate;
                 //send object to server to broadcast
