@@ -95,12 +95,18 @@ io.sockets.on('connection', (client) => {
   });
   
   client.on('addObject', (data) => {
-    game_server.addNewObject(client.game_id, data);
+    game_server.addNewObject(client.game_id, data.bulletOrCoin);
     console.log(game_server.broadCastObjects(client.game_id));
     client.emit('broadCastObject', {
       objects: game_server.broadCastObjects(client.game_id)
     })
   });
+
+  client.on('requestObjects', () => {
+    client.emit('updateBrodcast', {
+      objects: game_server.broadCastObjects(client.game_id)
+    })
+  })
   
 
   // Add a disconnect listener

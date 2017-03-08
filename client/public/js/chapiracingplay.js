@@ -372,11 +372,10 @@ const playState = (callbackPlay) => {
          });
 
          //receive objects
-        socket.on('broadCastObject', (data) => {
-            console.log('Get coins or bullets');
-            console.log(data);
+        socket.on('updateBrodcast', (data) => {
             addBulletsOrCoins(data.objects);
         });
+        socket.emit('requestObjects', {});
 
         setTimeout(function(){}, 15000);
         // Request to do this again ASAP
