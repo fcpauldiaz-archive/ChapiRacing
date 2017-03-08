@@ -166,7 +166,6 @@ const playState = (callbackPlay) => {
         //  leftLimit: 395, rightLimit: 685
         let team1 = (client.players[playerIndex].team === 1) ? true : false;
         let isRunner = (client.players[playerIndex].type === 'car') ? true : false;
-
         // Si es del equipo2 y es corredor o si es del equipo 1 y es bomber
         let windowLeftLimit = 395;
         let windowRightLimit = 650;
@@ -180,19 +179,18 @@ const playState = (callbackPlay) => {
             client.players[playerIndex].x -= client.speed * modifier;
             // Definimos el limite para que no se salga de la pantalla
             // a la izquierda
-            if (client.players[playerIndex].x <= windowLeftLimit) {
-                client.players[playerIndex].x = windowLeftLimit;
-            }
         }
 
         // Right key
         if (39 in keysDown) {
             client.players[playerIndex].x += client.speed * modifier;
-            if (client.players[playerIndex].x >= windowRightLimit) {
-                client.players[playerIndex].x = windowRightLimit;
-            }
         }
-        // setTimeout(update, 5000);
+        if (client.players[playerIndex].x <= windowLeftLimit) {
+            client.players[playerIndex].x = windowLeftLimit;
+        }
+        if (client.players[playerIndex].x >= windowRightLimit) {
+            client.players[playerIndex].x = windowRightLimit;
+        }
     };
 
     let indexPlayersToDraw = {
@@ -331,7 +329,6 @@ const playState = (callbackPlay) => {
     client.game_id = data.game_id;
     playerIndex = client.localplayer - 1;
     let player = client.players[playerIndex];
-    render();
     //send client player position
      socket.emit('playerUpdate', { 
         player

@@ -58,16 +58,23 @@ export default class Player  {
   setInitialX() {
     if (this.team === 1 && this.type === 'car') {
       this.x = 65;
+      return;
     }
-    else if (this.team === 2 && this.type === 'car') { //team 2 car
+    if (this.team === 2 && this.type === 'car') { //team 2 car
       this.x =  450;
+      return;
     }
-    else if (this.team === 1 && this.type === 'bomber') {
-      this.x =  55;
-    }
-    else { //team === 2 && type === 'bomber'
+    if (this.team === 1 && this.type === 'bomber') {
       this.x =  440;
+      return
     }
+    if  (this.team === 2 && this.type === 'bomber'){
+      this.x =  55;
+      return;
+    }
+    console.log(this.team)
+    console.log(this.type);
+    console.log('no debería llegar aqui');
   }
 
 
