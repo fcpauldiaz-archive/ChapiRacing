@@ -168,11 +168,15 @@ const playState = (callbackPlay) => {
         let isRunner = (client.players[playerIndex].type === 'car') ? true : false;
         // Si es del equipo2 y es corredor o si es del equipo 1 y es bomber
         let windowLeftLimit = 395;
-        let windowRightLimit = 650;
+        let windowRightLimit = 680;
         // Si es del equipo1 y es corredor o si es del equipo 2 y es bomber
         if ((team1 && isRunner) || (!team1 && !isRunner)) {
             windowLeftLimit = 10;
-            windowRightLimit = 250;
+            windowRightLimit = 300;
+        }
+
+        if (!isRunner) {
+            windowRightLimit -= 55;
         }
         // Left key
         if (37 in keysDown) {
