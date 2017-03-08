@@ -1,3 +1,31 @@
+const calcCollition = (player, object) => {
+    // Image runner is 66px width and Xpos is the middle so
+    // we have a left and right range.
+
+    // Same for the object, the object is 126px
+    // Can't be less than 0
+    let leftPlayerX = ((x - 63) <= 0) ? 0 : (x - 63);
+    // Can't be more than 761
+    let rightPlayerX = ((x + 63) <= 0) ? 761 : (x + 63);
+
+    // Can't be less than 0
+    let leftObjectX = ((x - 63) <= 0) ? 0 : (x - 63);
+    // Can't be more than 761
+    let rightObjectX = ((x + 63) <= 0) ? 761 : (x + 63);
+
+    if (leftObjectX === leftPlayerX && rightObjectX <= rightPlayerX) {
+        return true;
+    }
+
+    if (leftObjectX >= leftPlayerX && leftObjectX <= rightPlayerX) {
+        return true;
+    }
+
+    if (leftObjectX <= leftPlayerX && rightObjectX >= leftPlayerX) {
+        return true;
+    }
+}
+
 const playState = (callback) => {
     let canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
