@@ -26,6 +26,7 @@ const calcCollition = (player, object) => {
     }
 }
 
+let firstTime = true;
 const playState = (callback) => {
     let canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
@@ -120,6 +121,7 @@ const playState = (callback) => {
         speed: 700
     }
 
+    let playerIndex = 0;
     var keysDown = {};
     // Team1 - car attributes
     var team1Car = {
@@ -225,27 +227,66 @@ const playState = (callback) => {
         ctx.textBaseline = "top";
     };
 
+    const updatePlayersPosition = (data) => {
+        for (let i = 0; i < data.players.length; i++) {
+            client.players[data.players[i].number-1] = data.players[i];
+        }
+    }
+
     // The main game loop
     var main = function () {
         var now = Date.now();
         var delta = now - then;
 
+        // SetUp print de mapa
         update(delta / 1000);
         render();
 
         then = now;
+        let player = client.players[playerIndex];
+        // get players position
+        // socket.on('updatePosition', (data) => {
+        //     updatePlayersPosition(data);
+        // });
 
+        //send client player position
+        // socket.emit('teamselect', { 
+        //     player
+        // });
+        setTimeout(function(){}, 15000);
         // Request to do this again ASAP
         requestAnimationFrame(main);
     };
 
     // Cross-browser support for requestAnimationFrame
-    var w = window;
+    const w = window;
     requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
 
     // Let's play this game!
-    var then = Date.now();
-    setUpGame();
+    let then = Date.now();
+
+    //connect to lobby
+    // socket.on('onconnected', (data) => {
+    let data = getState().client;
+
+    client.localplayer = data.localplayer;
+    client.id = data.id;
+    client.game_id = data.game_id;
+    playerIndex = client.localplayer - 1;
+
+    if (firstTime) {
+        client.players[playerIndex] = data.players[playerIndex];
+        client.players[playerIndex].number = data.players[playerIndex].number;
+        client.players[playerIndex].team = -data.players[playerIndex].team;
+        firstTime = false;
+    }
+
+    let player = client.players[playerIndex];
+    //console.log(player);
+    //initialize players position on server
+    // socket.emit('teamselect', { 
+    //     player
+    // });
     main();
 }
 playState();
