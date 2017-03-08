@@ -14,7 +14,7 @@ const getCurrentState = () => {
 };
 
 const setNewClient = (newClient) => {
-    state.client = newClient;
+    state.client.players = newClient;
 }
 
 const setState = (actualState) => {
@@ -72,12 +72,6 @@ const main = () => {
     if (getCurrentState() === 2) {
         console.log("lets play");
         document.getElementById('canvasContainer').innerHTML = '<canvas id="canvas"></canvas>';
-        socket.on('getNewState', (data) =>  {
-            setNewClient(data);
-            console.log(data);
-        });
-
-        socket.emit('requestState', {});
         // console.log('newState');
         // console.log(getState().client);
         playState(playCallback);

@@ -80,9 +80,11 @@ serverGame.updatePlayerPosition = function(playerUpdate, user_id) {
       let player = game.findPlayer(j);
       //console.log(player);
       if (player.getPlayerId() === user_id) {
-        player.updatePos(playerUpdate.x, playerUpdate.y);
+        player.updatePos(playerUpdate.x);
         player.setTeam(playerUpdate.team);
         player.setTeamSelected(playerUpdate.teamSelected);
+        //console.log(player + 'update position');
+        //console.log(payerUpdate.teamSelected);
       }
     }//end inner for
   }//end outer for
@@ -104,6 +106,22 @@ serverGame.getPlayersPosition = function(game_id, user_id) {
           playerObj.team = player.getTeam();
           playerObj.teamSelected = player.getTeamSelected();
           players.push(playerObj);
+        }
+      }//end inner for
+    }// end if game_id
+  }//end outer for
+  return players;
+}
+
+serverGame.getPlayersFullPosition = function(game_id, user_id) {
+  let players = [];
+  for (let i = 0; i < this.games.length; i++) {
+    let game = this.games[i];
+    if (game.getId() === game_id) {
+      for (let j = 0; j < game.getPlayers().length; j++) {
+        let player = game.findPlayer(j);
+        if (player.getPlayerId() !== user_id) {
+          players.push(player);
         }
       }//end inner for
     }// end if game_id
@@ -152,59 +170,28 @@ serverGame.getPlayerType = function(game_id, player_id) {
   }
 }
 
-serverGame.sendNewState = function(game_id, player_id) {
+serverGame.prepareNewState = function(game_id) {
+  for (let i = 0; i< this.games.length; i++) {
+    let game = this.games[i];
+    if (game.getId() === game_id && game.getValid() === false) {
+      let players = game.getPlayers();
+      for (let j = 0; j < players.length; j++) {
+        let player = players[j];
+        player.setPlayerType(game.getPlayerActualType(player.getTeam()));
+        player.setInitialX();
+      }
+      game.setTypesValid();
+      return players;
+    }
+  }
+}
+
+serverGame.sendNewState = function(game_id) {
   for (let i = 0; i< this.games.length; i++) {
     let game = this.games[i];
     if (game.getId() === game_id) {
       let players = game.getPlayers();
-      console.log('entra1');
-      for (let j = 0; j < players.length; j++) {
-        let player = players[j];
-        if (player.getPlayerId() === player_id) {
-          console.log('entra');
-          let client = {
-            id: player_id,
-            game_id: game_id,
-            localplayer: player.getPlayerNumber(),
-            players: [
-                {
-                    number: 1,
-                    team: players[0].getTeam(),
-                    type: game.getPlayerType(players[0].getPlayerId()),
-                    x: players[0].getInitialX(),
-                    teamSelected: true,
-                    points: 0
-                }, {
-                    number: 2,
-                    team: players[1].getTeam(),
-                    type: game.getPlayerType(players[1].getPlayerId()),
-                    x: players[1].getInitialX(),
-                    teamSelected: true,
-                    points: 0
-                }, {
-                    number: 3,
-                    team: players[2].getTeam(),
-                    type: game.getPlayerType(players[2].getPlayerId()),
-                    x: players[2].getInitialX(),
-                    teamSelected: true,
-                    points: 0
-                }, {
-                    number: 4,
-                    team: players[3].getTeam(),
-                    type: game.getPlayerType(players[3].getPlayerId()),
-                    x: players[3].getInitialX(),
-                    teamSelected: true,
-                    points: 0
-                }
-            ],
-            speed: 700
-          };
-          game.restorePlayers();
-          console.log(client);
-          return client;
-        }
-      }
-      
+      return players;
     }
   }
 }

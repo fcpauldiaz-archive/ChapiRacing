@@ -74,7 +74,7 @@ io.sockets.on('connection', (client) => {
   client.on('playerUpdate', (data) => {
     game_server.updatePlayerPosition(data.player, client.userid);
     client.emit('receiveUpdate', {
-     players: game_server.getPlayersPosition(client.game_id, client.userid)
+     players: game_server.getPlayersFullPosition(client.game_id, client.userid)
     });
   });
 
@@ -91,10 +91,13 @@ io.sockets.on('connection', (client) => {
   })
 
   client.on('requestState', () => {
-    console.log('request')
     client.emit('getNewState', {
-      data: game_server.sendNewState(client.game_id, client.userid)
+      players: game_server.sendNewState(client.game_id)
     })
+  });
+
+  client.on('prepareState', () => {
+    game_server.prepareNewState(client.game_id);
   });
   
 

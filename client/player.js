@@ -2,13 +2,13 @@ export default class Player  {
   constructor(id, number) {
     //console.log(number, 'player number');
     this.playerId = id;
-    this.playerNumber = number;
-    this.playerTeam =  -1;
+    this.number = number;
+    this.team =  -1;
     this.teamSelected = false;
-    this.playerPoints =  0;
+    this.points =  0;
     this.type = '';
-    this.posx;
-    this.posy;
+    this.x;
+    this.y;
   }
 
   setPlayerType(type) {
@@ -20,32 +20,31 @@ export default class Player  {
   }
 
   getPlayerNumber() {
-    return this.playerNumber;
+    return this.number;
   }
 
   getTeam() {
-    return this.playerTeam;
+    return this.team;
   };
 
   setTeam(team) {
-    this.playerTeam = team;
+    this.team = team;
   };
 
   increasePoints() {
-    this.playerPoints =+ 1;
+    this.points =+ 1;
   };
 
   getPoints() {
-    return this.playerPoints;
+    return this.points;
   };
 
-  updatePos(x, y) {
-    this.posx = x;
-    this.posy = y;
+  updatePos(x) {
+    this.x = x;
   }
 
   getPos() {
-    return {x: this.posx, y: this.posy};
+    return {x: this.x, y: this.y};
   }
 
   setTeamSelected(selected) {
@@ -56,19 +55,20 @@ export default class Player  {
     return this.teamSelected;
   }
 
-  getInitialX() {
-    if (this.playerTeam === 1 && this.type === 'car') {
-      return 65;
+  setInitialX() {
+    if (this.team === 1 && this.type === 'car') {
+      this.x = 65;
     }
-    else if (this.playerTeam === 2 && this.type === 'car') { //team 2 car
-      return 450;
+    else if (this.team === 2 && this.type === 'car') { //team 2 car
+      this.x =  450;
     }
-    else if (this.playerTeam === 1 && this.type === 'bomber') {
-      return 55;
+    else if (this.team === 1 && this.type === 'bomber') {
+      this.x =  55;
     }
     else { //team === 2 && type === 'bomber'
-      return 440;
+      this.x =  440;
     }
   }
+
 
 }

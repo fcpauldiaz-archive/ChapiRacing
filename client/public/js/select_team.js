@@ -256,10 +256,12 @@ let selectTeamState = (callback) => {
             client.players[data.players[i].number - 1] = data.players[i];
         }
     }
-
+    var loop = true;
     // The main game loop
     const main = () => {
+        if (loop) {
          stats.begin();
+        
 
         const now = Date.now();
         const delta = now - then;
@@ -283,26 +285,30 @@ let selectTeamState = (callback) => {
             document.getElementById("stats").innerHTML = "Select a team!!";
         }
 
+        //send client player position
+        socket.emit('teamselect', { 
+            player
+        });
+
         let playersNoTeam = getPlayersWithoutSelectedTeam();
-        
+        console.log(playersNoTeam);
         document.getElementById('debug').innerHTML = 'Player no team: ' + playersNoTeam;
         if (playersNoTeam === 0) {
+            console.log(enableCallback);
             if (!enableCallback) {
                 console.log('Finish' + playersNoTeam);
                 callback(client);
                 enableCallback = true;
                 document.getElementById('canvas').remove();
+                loop = false;
             }
         }
 
-        //send client player position
-        socket.emit('teamselect', { 
-            player
-        });
-        setTimeout(function(){}, 15000);
+       
         // Request to do this again ASAP
         stats.end();
         requestAnimationFrame(main);
+        }
     };
 
     // Cross-browser support for requestAnimationFrame

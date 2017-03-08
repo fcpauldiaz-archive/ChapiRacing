@@ -45,7 +45,7 @@ const playState = (callbackPlay) => {
     //bgImage.src = "images/mapa.jpg";
 
     // Team 1 car image
-    var team1CarReady = false;
+    var team1CarReady = true;
     var team1CarImage = new Image();
     team1CarImage.onload = function () {
       team1CarReady = true;
@@ -54,7 +54,7 @@ const playState = (callbackPlay) => {
     //team1CarImage.src = "images/blue_car.jpeg";
 
     // Team 2 car image
-    var team2CarReady = false;
+    var team2CarReady = true;
     var team2CarImage = new Image();
     team2CarImage.onload = function () {
       team2CarReady = true;
@@ -63,7 +63,7 @@ const playState = (callbackPlay) => {
     //team2CarImage.src = "images/green_car.png";
 
     // Team 2 car image
-    var bomber1Ready = false;
+    var bomber1Ready = true;
     var bomber1Image = new Image();
     bomber1Image.onload = function () {
       bomber1Ready = true;
@@ -72,7 +72,7 @@ const playState = (callbackPlay) => {
     //bomber1Image.src = "images/bomber.png";
 
     // Team 2 car image
-    var bomber2Ready = false;
+    var bomber2Ready = true;
     var bomber2Image = new Image();
     bomber2Image.onload = function () {
       bomber2Ready = true;
@@ -120,7 +120,12 @@ const playState = (callbackPlay) => {
             }
         ],
         speed: 700
-    }
+    };
+    socket.emit('prepareState');
+    socket.on('getNewState', (data) =>  {
+        client.players = data.players;
+    });
+    socket.emit('requestState');
 
     let playerIndex = 0;
     var keysDown = {};
@@ -164,11 +169,11 @@ const playState = (callbackPlay) => {
 
         // Si es del equipo2 y es corredor o si es del equipo 1 y es bomber
         let windowLeftLimit = 395;
-        let windowRightLimit = 685;
+        let windowRightLimit = 650;
         // Si es del equipo1 y es corredor o si es del equipo 2 y es bomber
         if ((team1 && isRunner) || (!team1 && !isRunner)) {
             windowLeftLimit = 10;
-            windowRightLimit = 300;
+            windowRightLimit = 250;
         }
         // Left key
         if (37 in keysDown) {
@@ -260,13 +265,13 @@ const playState = (callbackPlay) => {
             let player = client.players[i];
             // console.log(player);
             if (player.team === 1) {
-                if (player.type = 'car') {
+                if (player.type === 'car') {
                     indexPlayersToDraw.team1.runner = player.number - 1;
                 } else {
                     indexPlayersToDraw.team1.bomber = player.number - 1;
                 }
             } else if (player.team === 2) {
-                if (player.type = 'car') {
+                if (player.type === 'car') {
                     indexPlayersToDraw.team2.runner = player.number - 1;
                 } else {
                     indexPlayersToDraw.team2.bomber = player.number - 1;
@@ -277,7 +282,7 @@ const playState = (callbackPlay) => {
 
     const updatePlayersPosition = (data) => {
         for (let i = 0; i < data.players.length; i++) {
-            client.players[data.players[i].number-1] = data.players[i];
+            client.players[data.players[i].number-1].x = data.players[i].x;
         }
         // console.log(client.players);
         calculatePlayersIndexToRender();
@@ -292,14 +297,12 @@ const playState = (callbackPlay) => {
         // SetUp print de mapa
         update(delta / 1000);
         render();
-
         then = now;
         let player = client.players[playerIndex];
         // get players position
         socket.on('receiveUpdate', (data) => {
              updatePlayersPosition(data);
         });
-
         //send client player position
          socket.emit('playerUpdate', { 
             player
@@ -317,32 +320,24 @@ const playState = (callbackPlay) => {
     let then = Date.now();
 
     //connect to lobby
-    // socket.on('onconnected', (data) => {
+    // socket.on('onconnected', (data) => 
     let data = getState().client;
+    console.log('getState');
     console.log(data);
+    console.log(client);
 
     client.localplayer = data.localplayer;
     client.id = data.id;
     client.game_id = data.game_id;
     playerIndex = client.localplayer - 1;
-
-    if (firstTime) {
-        client.players = data.players;
-        // client.players[playerIndex].number = data.players[playerIndex].number;
-        // client.players[playerIndex].team = data.players[playerIndex].team;
-        firstTime = false;
-        console.log('Client actual');
-        console.log(client.players);
-    }
-
     let player = client.players[playerIndex];
-    //console.log(player);
-    //initialize players position on server
-    socket.on('sendPlayerType', (data) =>  {
-        client.players[playerIndex].type = data.type;
-    });
+    render();
+    //send client player position
+     socket.emit('playerUpdate', { 
+        player
+     });
     calculatePlayersIndexToRender();
 
-    socket.emit('getPlayerType', {});
+    //socket.emit('getPlayerType', {});
     mainPlayGame();
 }

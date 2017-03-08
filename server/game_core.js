@@ -9,10 +9,19 @@ export default class Game {
     this.team2Type = ['bomber', 'car'];
     this.objectsArray = [];
     this.playerCount = playerCount;
+    this.typesValid = false;
   }
   
   getId() {  
     return this.id; 
+  }
+
+  setTypesValid() {
+    this.typesValid = true;
+  }
+
+  getValid() {
+    return this.typesValid;
   }
 
   increasePlayerCount() {
@@ -95,28 +104,34 @@ export default class Game {
     this.numberAvailable = this.numberAvailable.sort();
   }
 
+  getPlayerActualType(team) {
+    if (team === 1) {
+        return this.team1Type.shift();
+    }
+    if (team === 2) {
+      return this.team2Type.shift();
+    }
+    console.log('team not found')
+    console.log(team)
+    return -1;
+  }
+
    getPlayerType(player_id) {
+
     for (let i = 0; i < this.players.length; i++) {
       let player = this.players[i];
       if (player.getPlayerId() === player_id) {
         if (player.getTeam() === 1) {
           const type = this.team1Type.shift();
-          player.setPlayerType(type);
           return type;
         }
         if (player.getTeam() === 2) {
           const type = this.team2Type.shift();
-          player.setPlayerType(type);
           return type;
         }
       }
     }
     return -1; //should get here, error
-  }
-
-  restorePlayers()  {
-    this.team1Type = ['bomber', 'car'];
-    this.team2Type = ['bomber', 'car'];
   }
 
 }
