@@ -200,7 +200,22 @@ const playState = (callback) => {
         }
     };
     // Draw everything
+    let firstRender = true;
     var render = function () {
+        if (firstRender) {
+            client.players[indexPlayersToDraw.team1.runner].x = 65;
+            client.players[indexPlayersToDraw.team1.runner].y = carYPosition;
+
+            client.players[indexPlayersToDraw.team2.runner].x = 450;
+            client.players[indexPlayersToDraw.team2.runner].y = carYPosition;
+
+            client.players[indexPlayersToDraw.team1.bomber].x = 55;
+            client.players[indexPlayersToDraw.team1.bomber].y = initialHeight;
+
+            client.players[indexPlayersToDraw.team2.bomber].x = 440;
+            client.players[indexPlayersToDraw.team2.bomber].y = initialHeight;
+            firstRender = false;
+        }
         if (bgReady) {
             ctx.drawImage(bgImage, 0, 0);
         }
@@ -208,7 +223,7 @@ const playState = (callback) => {
             ctx.drawImage(
                 team1CarImage,
                 client.players[indexPlayersToDraw.team1.runner].x,
-                team1Car.y
+                client.players[indexPlayersToDraw.team1.runner].y
             );
         }
 
@@ -216,7 +231,7 @@ const playState = (callback) => {
             ctx.drawImage(
                 team2CarImage,
                 client.players[indexPlayersToDraw.team2.runner].x,
-                team2Car.y
+                client.players[indexPlayersToDraw.team2.runner].y
             );
         }
 
@@ -224,7 +239,7 @@ const playState = (callback) => {
             ctx.drawImage(
                 bomber1Image,
                 client.players[indexPlayersToDraw.team1.bomber].x,
-                initialHeight
+                client.players[indexPlayersToDraw.team1.bomber].y
             );
         }
 
@@ -232,7 +247,7 @@ const playState = (callback) => {
             ctx.drawImage(
                 bomber2Image,
                 client.players[indexPlayersToDraw.team2.bomber].x,
-                initialHeight
+                client.players[indexPlayersToDraw.team2.bomber].y
             );
         }
     };
