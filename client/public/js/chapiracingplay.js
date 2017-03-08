@@ -159,58 +159,108 @@ const playState = (callback) => {
         // If team 2:
         //  leftLimit: 395, rightLimit: 685
         let team1 = (client.players[playerIndex].team === 1) ? true : false;
+        let isRunner = (client.players[playerIndex].type === 'car') ? true : false;
+
+        // Si es del equipo2 y es corredor o si es del equipo 1 y es bomber
         let windowLeftLimit = 395;
         let windowRightLimit = 685;
-        if (team1) {
-            let windowLeftLimit = 10;
-            let windowRightLimit = 300;
+        // Si es del equipo1 y es corredor o si es del equipo 2 y es bomber
+        if ((team1 && isRunner) || (!team1 && !isRunner)) {
+            windowLeftLimit = 10;
+            windowRightLimit = 300;
         }
         // Left key
         if (37 in keysDown) {
             client.players[playerIndex].x -= client.speed * modifier;
             // Definimos el limite para que no se salga de la pantalla
             // a la izquierda
-            if (client.players[playerIndex].x <= 70) {
-                client.players[playerIndex].x = 70;
+            if (client.players[playerIndex].x <= windowLeftLimit) {
+                client.players[playerIndex].x = windowLeftLimit;
             }
         }
 
         // Right key
         if (39 in keysDown) {
             client.players[playerIndex].x += client.speed * modifier;
-            if (client.players[playerIndex].x >= 685) {
-                client.players[playerIndex].x = 685;
+            if (client.players[playerIndex].x >= windowRightLimit) {
+                client.players[playerIndex].x = windowRightLimit;
             }
         }
         // setTimeout(update, 5000);
     };
 
+    let indexPlayersToDraw = {
+        team1: {
+            bomber: 0,
+            runner: 0
+        },
+        team2: {
+            bomber: 0,
+            runner: 0
+        }
+    };
     // Draw everything
     var render = function () {
         if (bgReady) {
             ctx.drawImage(bgImage, 0, 0);
         }
         if (team1CarReady) {
-            ctx.drawImage(team1CarImage, team1Car.x, team1Car.y);
+            ctx.drawImage(
+                team1CarImage,
+                client.players[indexPlayersToDraw.team1.runner].x,
+                team1Car.y
+            );
         }
 
         if (team2CarReady) {
-            ctx.drawImage(team2CarImage, team2Car.x, team2Car.y);
+            ctx.drawImage(
+                team2CarImage,
+                client.players[indexPlayersToDraw.team2.runner].x,
+                team2Car.y
+            );
         }
 
         if (bomber1Ready) {
-            ctx.drawImage(bomber1Image, team2Car.x, initialHeight)
+            ctx.drawImage(
+                bomber1Image,
+                client.players[indexPlayersToDraw.team1.bomber].x,
+                initialHeight
+            );
         }
 
         if (bomber2Ready) {
-            ctx.drawImage(bomber2Image, team1Car.x, initialHeight)
+            ctx.drawImage(
+                bomber2Image,
+                client.players[indexPlayersToDraw.team2.bomber].x,
+                initialHeight
+            );
         }
     };
+
+    const calculatePlayersIndexToRender = () => {
+        for (let i = 0; i < client.players.length; i++) {
+            let player = client.players[i];
+            if (player.team === 1) {
+                if (player.type = 'car') {
+                    indexPlayersToDraw.team1.runner = player.number;
+                } else {
+                    indexPlayersToDraw.team1.bomber = player.number;
+                }
+            } else if (player.team === 2) {
+                if (player.type = 'car') {
+                    indexPlayersToDraw.team2.runner = player.number;
+                } else {
+                    indexPlayersToDraw.team2.bomber = player.number;
+                }
+            }
+        }
+    }
 
     const updatePlayersPosition = (data) => {
         for (let i = 0; i < data.players.length; i++) {
             client.players[data.players[i].number-1] = data.players[i];
         }
+        calculatePlayersIndexToRender();
     }
 
     // The main game loop
