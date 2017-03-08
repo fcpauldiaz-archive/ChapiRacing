@@ -88,6 +88,7 @@ const playState = (callbackPlay) => {
         id: '',
         game_id: '',
         localplayer: 2,
+        bulletsOrCoins: [],
         players: [
             {
                 number: 1,
@@ -159,7 +160,7 @@ const playState = (callbackPlay) => {
     };
 
     // Update game objects
-    var update = function (modifier) {
+    var update = function (modifier, updateDate) {
         // If team 1:
         //  leftLimit: 10, rightLimit: 300
         // If team 2:
@@ -185,6 +186,40 @@ const playState = (callbackPlay) => {
         if (39 in keysDown) {
             client.players[playerIndex].x += client.speed * modifier;
         }
+
+        //space bar or enter
+        if (32 in keysDown || 13 in keysDown) {
+            console.log( Math.abs(updateDate.getSeconds() - actualDate.getSeconds()));
+            if ( Math.abs(updateDate.getSeconds() - actualDate.getSeconds()) > 2) {
+                let newImage = new Image();
+                const random = Math.random();
+                //draw bullet
+                if (random >= 0.5) {
+                    newImage.src = "client/public/images/bomb.png";
+                }  
+                //draw coin
+                if (random < 0.5) {
+                    newImage.src = "client/public/images/coin.png";
+                    newImage.height = 80;
+                    newImage.width = 80;
+                }
+                const bulletOrCoin = {
+                    x: client.players[playerIndex].x,
+                    y: initialHeight,
+                    image: newImage
+                }
+                client.bulletsOrCoins.push(bulletOrCoin);
+                actualDate = updateDate;
+                console.log(client);
+            }
+        }
+
+        //update bulletsOrCoins
+        for (let k = 0; k < client.bulletsOrCoins.length; k++) {
+            let object = client.bulletsOrCoins[k];
+            object.y += 5;
+        }
+
         if (client.players[playerIndex].x <= windowLeftLimit) {
             client.players[playerIndex].x = windowLeftLimit;
         }
@@ -256,6 +291,10 @@ const playState = (callbackPlay) => {
                 initialHeight
             );
         }
+        for (let i = 0; i < client.bulletsOrCoins.length; i++) {
+            const img = client.bulletsOrCoins[i];
+            ctx.drawImage(img.image, img.x, img.y);
+        }
     };
 
     const calculatePlayersIndexToRender = () => {
@@ -293,7 +332,7 @@ const playState = (callbackPlay) => {
         var delta = now - then;
 
         // SetUp print de mapa
-        update(delta / 1000);
+        update(delta / 1000, new Date());
         render();
         then = now;
         let player = client.players[playerIndex];
@@ -334,7 +373,7 @@ const playState = (callbackPlay) => {
         player
      });
     calculatePlayersIndexToRender();
-
+    let actualDate = new Date();
     //socket.emit('getPlayerType', {});
     mainPlayGame();
 }
