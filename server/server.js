@@ -157,9 +157,11 @@ serverGame.sendNewState = function(game_id, player_id) {
     let game = this.games[i];
     if (game.getId() === game_id) {
       let players = game.getPlayers();
+      console.log('entra1');
       for (let j = 0; j < players.length; j++) {
         let player = players[j];
         if (player.getId() === player_id) {
+          console.log('entra');
           let client = {
             id: player_id,
             game_id: game_id,

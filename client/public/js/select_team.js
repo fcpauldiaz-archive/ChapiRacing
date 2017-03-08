@@ -251,7 +251,7 @@ let selectTeamState = (callback) => {
     //update the other players position
     const updatePlayersPosition = (data) => {
         for (let i = 0; i < data.players.length; i++) {
-            client.players[data.players[i].number-1] = data.players[i];
+            client.players[data.players[i].number - 1] = data.players[i];
         }
     }
 
@@ -329,4 +329,4 @@ let selectTeamState = (callback) => {
     main();
     // });
 };
- window.addEventListener('resize', selectTeamState, false);
+//window.addEventListener('resize', selectTeamState, false);

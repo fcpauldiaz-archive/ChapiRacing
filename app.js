@@ -91,6 +91,7 @@ io.sockets.on('connection', (client) => {
   })
 
   client.on('requestState', () => {
+    console.log('request')
     client.emit('getNewState', {
       data: game_server.sendNewState(client.game_id, client.userid)
     })
