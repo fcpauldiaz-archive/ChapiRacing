@@ -101,12 +101,12 @@ export default class Game {
       if (player.getPlayerId() === player_id) {
         if (player.getTeam() === 1) {
           const type = this.team1Type.shift();
-          player.setType(type);
+          player.setPlayerType(type);
           return type;
         }
         if (player.getTeam() === 2) {
           const type = this.team2Type.shift();
-          player.setType(type);
+          player.setPlayerType(type);
           return type;
         }
       }
