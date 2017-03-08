@@ -73,6 +73,9 @@ io.sockets.on('connection', (client) => {
 
   client.on('playerUpdate', (data) => {
     game_server.updatePlayerPosition(data.player, client.userid);
+    client.emit('receiveUpdate', {
+     players: game_server.getPlayersPosition(client.game_id, client.userid)
+    });
   });
 
   /*client.on('updateObject', (data) => {
@@ -86,6 +89,12 @@ io.sockets.on('connection', (client) => {
       type: game_server.getPlayerType(client.game_id, client.userid)
     })
   })
+
+  client.on('requestState', () => {
+    client.emit('getNewState', {
+      data: game_server.sendNewState(client.game_id, client.userid)
+    })
+  });
   
 
   // Add a disconnect listener

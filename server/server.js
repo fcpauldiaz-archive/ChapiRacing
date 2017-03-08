@@ -199,6 +199,7 @@ serverGame.sendNewState = function(game_id, player_id) {
           };
         }
         game.restorePlayers();
+        console.log(client);
         return client;
       }
       
