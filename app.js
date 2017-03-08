@@ -78,12 +78,6 @@ io.sockets.on('connection', (client) => {
     });
   });
 
-  /*client.on('updateObject', (data) => {
-    game_server.updateObjectPosition(client.game_id);
-    client.emit('sendPosition', {
-      fallingObjects: game_server.
-    })
-  });*/
   client.on('getPlayerType', () => {
     client.emit('sendPlayerType', {
       type: game_server.getPlayerType(client.game_id, client.userid)
@@ -98,6 +92,14 @@ io.sockets.on('connection', (client) => {
 
   client.on('prepareState', () => {
     game_server.prepareNewState(client.game_id);
+  });
+  
+  client.on('addObject', (data) => {
+    game_server.addNewObject(client.game_id, data);
+    console.log(game_server.broadCastObjects(client.game_id));
+    client.emit('broadCastObject', {
+      objects: game_server.broadCastObjects(client.game_id)
+    })
   });
   
 

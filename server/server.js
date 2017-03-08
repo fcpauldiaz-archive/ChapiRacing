@@ -139,17 +139,22 @@ serverGame.addObject = function(game_id, pos_x, pos_y) {
   }
 }
 
-serverGame.updatePosObject = function(game_id, object_id, pos_x, pos_y) {
+serverGame.addNewObject = function(game_id, object) {
   for (let i = 0; i < this.games.length; i++) {
     let game = this.games[i];
     if (game.getId() === game_id) {
-      game.updateObject(object_id, pos_x, pos_y); 
+      game.addObject(object); 
     }
   }
 }
 
-serverGame.getAllObjects = function(game_id, player_id) {
-  //for ()
+serverGame.broadCastObjects = function(game_id) {
+  for (let i = 0; i < this.games.length; i++) {
+    let game = this.games[i];
+    if (game.getId() === game_id) {
+      return game.getObjects();
+    }
+  }
 }
 
 serverGame.removeObject = function(game_id, object_id) {

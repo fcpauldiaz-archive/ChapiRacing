@@ -213,9 +213,14 @@ const playState = (callbackPlay) => {
                     bulletOrCoin.type = 'coin';
                 }
                 bulletOrCoin.image = newImage;
+<<<<<<< HEAD
+=======
 
+>>>>>>> 8fcf7d3e9c8c066ed5fbc35cbc64f8c6caea422b
                 client.bulletsOrCoins.push(bulletOrCoin);
                 actualDate = updateDate;
+                //send object to server to broadcast
+                socket.emit('addObject', {bulletOrCoin});
                 console.log(client);
             }
         }
@@ -350,6 +355,12 @@ const playState = (callbackPlay) => {
          socket.emit('playerUpdate', { 
             player
          });
+
+         //receive objects
+        socket.on('broadCastObject', (data) => {
+            console.log(data);
+        });
+
         setTimeout(function(){}, 15000);
         // Request to do this again ASAP
         requestAnimationFrame(mainPlayGame);

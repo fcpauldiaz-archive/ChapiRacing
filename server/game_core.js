@@ -58,6 +58,7 @@ export default class Game {
   }
 
   addObject(object) {
+    console.log(object);
     this.objectsArray.push(object);
   }
 
@@ -73,19 +74,8 @@ export default class Game {
     }
   }
 
-  updateObject(object_id, pos_x, pos_y) {
-    for (let i = 0; i < this.objectsArray.length; i++) {
-      object = this.objectsArray[i];
-      if (object.getId() === object_id) {
-         object.updatePos(pos_x, pos_y);
-        //nothing else to do;
-        break;
-      }
-    }
-  }
-
-  getObects() {
-    return this.objects;
+  getObjects() {
+    return this.objectsArray;
   }
 
   getObjectsLength() {
