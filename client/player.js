@@ -1,15 +1,19 @@
 export default class Player  {
   constructor(id, number) {
-     console.log(number, 'player number');
+    //console.log(number, 'player number');
     this.playerId = id;
     this.playerNumber = number;
     this.playerTeam =  -1;
     this.teamSelected = false;
     this.playerPoints =  0;
+    this.type = '';
     this.posx;
     this.posy;
   }
 
+  setPlayerType(type) {
+    this.type = type;
+  }
 
   getPlayerId() {
     return this.playerId;
@@ -50,6 +54,21 @@ export default class Player  {
 
   getTeamSelected() {
     return this.teamSelected;
+  }
+
+  getInitialX() {
+    if (this.team === 1 && type === 'car') {
+      return 65;
+    }
+    else if (this.team === 2 && type === 'car') { //team 2 car
+      return 450;
+    }
+    else if (this.team === 1 && type === 'bomber') {
+      return 55;
+    }
+    else { //team === 2 && type === 'bomber'
+      return 440;
+    }
   }
 
 }

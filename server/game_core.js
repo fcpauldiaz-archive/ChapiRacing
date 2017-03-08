@@ -100,10 +100,14 @@ export default class Game {
       let player = this.players[i];
       if (player.getPlayerId() === player_id) {
         if (player.getTeam() === 1) {
-          return this.team1Type.shift();
+          const type = this.team1Type.shift();
+          player.setType(type);
+          return type;
         }
         if (player.getTeam() === 2) {
-          return this.team2Type.shift();
+          const type = this.team2Type.shift();
+          player.setType(type);
+          return type;
         }
       }
     }
