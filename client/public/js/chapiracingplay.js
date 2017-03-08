@@ -215,9 +215,10 @@ const playState = (callbackPlay) => {
                     bulletOrCoin.type = 'coin';
                 }
                 bulletOrCoin.image = newImage;
-                
                 client.bulletsOrCoins.push(bulletOrCoin);
                 actualDate = updateDate;
+                //send object to server to broadcast
+                socket.emit('addObject', {bulletOrCoin});
                 console.log(client);
             }
         }
@@ -352,6 +353,12 @@ const playState = (callbackPlay) => {
          socket.emit('playerUpdate', { 
             player
          });
+
+         //receive objects
+        socket.on('broadCastObject', (data) => {
+            console.log(data);
+        });
+
         setTimeout(function(){}, 15000);
         // Request to do this again ASAP
         requestAnimationFrame(mainPlayGame);
