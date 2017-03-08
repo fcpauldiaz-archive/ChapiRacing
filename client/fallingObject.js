@@ -1,8 +1,14 @@
+import UUID from 'uuid';
 
-export const FallingObject = (type) => {
-  this.type = type
-  this.posx;
-  this.posy;
+export const FallingObject = (posx, posy) => {
+  this.id = UUID();
+  this.type
+  this.posx = posx;
+  this.posy = posy;
+
+  getId = () => {
+    return this.id;
+  }
 
   getType = () => {
     return this.type;
@@ -17,6 +23,7 @@ export const FallingObject = (type) => {
   getPos = () => {
     return {x: this.posx, y: this.posy};
   }
+
 
 }
 
