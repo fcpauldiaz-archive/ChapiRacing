@@ -71,19 +71,28 @@ io.sockets.on('connection', (client) => {
     });
   });
 
+  client.on('playerUpdate', (data) => {
+    game_server.updatePlayerPosition(data.player, client.userid);
+  });
+
   /*client.on('updateObject', (data) => {
     game_server.updateObjectPosition(client.game_id);
     client.emit('sendPosition', {
       fallingObjects: game_server.
     })
   });*/
+  client.on('getPlayerType', () => {
+    client.emit('sendPlayerType', {
+      type: game_server.getPlayerType(client.game_id, client.userid)
+    })
+  })
   
 
   // Add a disconnect listener
   client.on('disconnect', () => {
     console.log('client disconnected ' + client.userid);
     game_server.endGame(client.userid);
-    console.log(game_server.games);
+    //console.log(game_server.games);
   });
 
 }); //client.on 
