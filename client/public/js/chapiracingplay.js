@@ -55,29 +55,42 @@ const playState = (callback) => {
     let carYPosition = (window.innerHeight - 0.18*window.innerHeight)
 
     let client = {
-        team1: {
-            bomber: {
-                playerNumber: 0,
-                x: 0
-            },
-            driver: {
-                playerNumber: 0,
-                x: 0
-            },
-            points: 0
-        },
-        team2: {
-            bomber: {
-                playerNumber: 0,
-                x: 0
-            },
-            driver: {
-                playerNumber: 0,
-                x: 0
-            },
-            points: 0
-        }
-    };
+        id: '',
+        game_id: '',
+        localplayer: 2,
+        players: [
+            {
+                number: 1,
+                team: -1,
+                x: 390,
+                teamSelected: false,
+                type: '',
+                points: 0
+            }, {
+                number: 2,
+                team: -1,
+                x: 390,
+                teamSelected: false,
+                type: '',
+                points: 0
+            }, {
+                number: 3,
+                team: -1,
+                x: 390,
+                teamSelected: false,
+                type: '',
+                points: 0
+            }, {
+                number: 4,
+                team: -1,
+                x: 390,
+                teamSelected: false,
+                type: '',
+                points: 0
+            }
+        ],
+        speed: 700
+    }
 
     var keysDown = {};
     // Team1 - car attributes
