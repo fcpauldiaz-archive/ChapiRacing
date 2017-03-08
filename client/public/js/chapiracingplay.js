@@ -4,14 +4,14 @@ const calcCollition = (player, object) => {
 
     // Same for the object, the object is 126px
     // Can't be less than 0
-    let leftPlayerX = ((x - 63) <= 0) ? 0 : (x - 63);
+    let leftPlayerX = ((player.x - 33) <= 0) ? 0 : (player.x - 33);
     // Can't be more than 761
-    let rightPlayerX = ((x + 63) <= 0) ? 761 : (x + 63);
+    let rightPlayerX = ((player.x + 33) <= 0) ? 761 : (player.x + 33);
 
     // Can't be less than 0
-    let leftObjectX = ((x - 63) <= 0) ? 0 : (x - 63);
+    let leftObjectX = ((object.x - 25) <= 0) ? 0 : (object.x - 25);
     // Can't be more than 761
-    let rightObjectX = ((x + 63) <= 0) ? 761 : (x + 63);
+    let rightObjectX = ((object.x + 25) <= 0) ? 761 : (object.x + 25);
 
     if (leftObjectX === leftPlayerX && rightObjectX <= rightPlayerX) {
         return true;
