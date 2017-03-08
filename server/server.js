@@ -198,6 +198,7 @@ serverGame.sendNewState = function(game_id, player_id) {
             speed: 700
           };
         }
+        game.restorePlayers();
         return client;
       }
       

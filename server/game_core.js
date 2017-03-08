@@ -114,4 +114,9 @@ export default class Game {
     return -1; //should get here, error
   }
 
+  restorePlayers()  {
+    this.team1Type = ['bomber', 'car'];
+    this.team2Type = ['bomber', 'car'];
+  }
+
 }
