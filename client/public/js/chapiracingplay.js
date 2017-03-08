@@ -197,21 +197,25 @@ const playState = (callbackPlay) => {
             if ( Math.abs(updateDate.getSeconds() - actualDate.getSeconds()) > 2) {
                 let newImage = new Image();
                 const random = Math.random();
+                let bulletOrCoin = {
+                    x: client.players[playerIndex].x,
+                    y: initialHeight,
+                    id: uuid.v4()
+                }
                 //draw bullet
                 if (random >= 0.5) {
                     newImage.src = "client/public/images/bomb.png";
+                    bulletOrCoin.type = 'bullet';
                 }  
                 //draw coin
                 if (random < 0.5) {
                     newImage.src = "client/public/images/coin.png";
                     newImage.height = 80;
                     newImage.width = 80;
+                    bulletOrCoin.type = 'coin';
                 }
-                const bulletOrCoin = {
-                    x: client.players[playerIndex].x,
-                    y: initialHeight,
-                    image: newImage
-                }
+                bulletOrCoin.image = newImage;
+                
                 client.bulletsOrCoins.push(bulletOrCoin);
                 actualDate = updateDate;
                 console.log(client);
