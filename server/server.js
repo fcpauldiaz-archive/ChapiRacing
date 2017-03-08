@@ -110,3 +110,45 @@ serverGame.getPlayersPosition = function(game_id, user_id) {
   }//end outer for
   return players;
 }
+
+//CHAPI RACING ALGORITHIM
+serverGame.addObject = function(game_id, pos_x, pos_y) {
+  for (let i = 0; i < this.games.length; i++) {
+    let game = this.games[i];
+    if (game.getId() === game_id) {
+      game.addObject(new FallingObject(pos_x, pos_y));
+    }
+  }
+}
+
+serverGame.updatePosObject = function(game_id, object_id, pos_x, pos_y) {
+  for (let i = 0; i < this.games.length; i++) {
+    let game = this.games[i];
+    if (game.getId() === game_id) {
+      game.updateObject(object_id, pos_x, pos_y); 
+    }
+  }
+}
+
+serverGame.getAllObjects = function(game_id, player_id) {
+  //for ()
+}
+
+serverGame.removeObject = function(game_id, object_id) {
+  for (let i = 0; i < this.games.length; i++) {
+    let game = this.games[i];
+    if (game.getId() === game_id) {
+      game.removeObject(object_id);
+    }
+  }
+}
+
+serverGame.getPlayerType = function(game_id, player_id) {
+  for (let i = 0; i < this.games.length; i++) {
+    let game = this.games[i];
+    if (game.getId() === game_id) {
+      return game.getPlayerType(player_id);
+    }
+  }
+}
+

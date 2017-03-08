@@ -5,6 +5,8 @@ export default class Game {
     this.id = id;
     this.players = players;
     this.numberAvailable = [2, 3, 4];
+    this.team1Type = ['bomber', 'car'];
+    this.team2Type = ['bomber', 'car'];
     this.objectsArray = [];
     this.playerCount = playerCount;
   }
@@ -50,6 +52,29 @@ export default class Game {
     this.objectsArray.push(object);
   }
 
+  removeObject(object_id) {
+    for (let i = 0; i < this.objectsArray.length; i++) {
+      object = this.objectsArray[i];
+      if (object.getId() === object_id) {
+        //remove object from array
+        this.objectsArray.splice(i, 1);
+        //nothing else to do;
+        break;
+      }
+    }
+  }
+
+  updateObject(object_id, pos_x, pos_y) {
+    for (let i = 0; i < this.objectsArray.length; i++) {
+      object = this.objectsArray[i];
+      if (object.getId() === object_id) {
+         object.updatePos(pos_x, pos_y);
+        //nothing else to do;
+        break;
+      }
+    }
+  }
+
   getObects() {
     return this.objects;
   }
@@ -59,15 +84,30 @@ export default class Game {
   }
   //use when player is added
   getPlayerNumber() {
-    console.log(this.numberAvailable, "number");
+    //console.log(this.numberAvailable, "number");
     return this.numberAvailable.shift();
   }
   //use when player retires from game
   addNumber(number) {
-    console.log(number+1, "unshift");
+    //console.log(number+1, "unshift");
     //inserts at first position
     this.numberAvailable.unshift(number+1);
     this.numberAvailable = this.numberAvailable.sort();
+  }
+
+   getPlayerType(player_id) {
+    for (let i = 0; i < this.players.length; i++) {
+      let player = this.players[i];
+      if (player.getPlayerId() === player_id) {
+        if (player.getTeam() === 1) {
+          return this.team1Type.shift();
+        }
+        if (player.getTeam() === 2) {
+          return this.team2Type.shift();
+        }
+      }
+    }
+    return -1; //should get here, error
   }
 
 }
