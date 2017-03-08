@@ -154,37 +154,37 @@ const playState = (callback) => {
 
     // Update game objects
     var update = function (modifier) {
-        // Team 1 - Car movement
-        if (37 in keysDown) { // Player holding left
-            team1Car.x -= team1Car.speed * modifier;
-            if (team1Car.x <= 10) {
-                team1Car.x = 10;
-            }
+        // If team 1:
+        //  leftLimit: 10, rightLimit: 300
+        // If team 2:
+        //  leftLimit: 395, rightLimit: 685
+        let team1 = (client.players[playerIndex].team === 1) ? true : false;
+        let windowLeftLimit = 395;
+        let windowRightLimit = 685;
+        if (team1) {
+            let windowLeftLimit = 10;
+            let windowRightLimit = 300;
         }
-        if (39 in keysDown) { // Player holding right
-            team1Car.x += team1Car.speed * modifier;
-            if (team1Car.x >= 300) {
-                team1Car.x = 300;
+        // Left key
+        if (37 in keysDown) {
+            client.players[playerIndex].x -= client.speed * modifier;
+            // Definimos el limite para que no se salga de la pantalla
+            // a la izquierda
+            if (client.players[playerIndex].x <= 70) {
+                client.players[playerIndex].x = 70;
             }
         }
 
-        // Team 2 - Car movement
-        if (65 in keysDown) { // Player holding left
-            team2Car.x -= team2Car.speed * modifier;
-            if (team2Car.x <= 395) {
-                team2Car.x = 395;
-            }
-        }
-        if (68 in keysDown) { // Player holding right
-            team2Car.x += team2Car.speed * modifier;
-            if (team2Car.x >= 685) {
-                team2Car.x = 685;
+        // Right key
+        if (39 in keysDown) {
+            client.players[playerIndex].x += client.speed * modifier;
+            if (client.players[playerIndex].x >= 685) {
+                client.players[playerIndex].x = 685;
             }
         }
         // setTimeout(update, 5000);
     };
 
-    var y = 50;
     // Draw everything
     var render = function () {
         if (bgReady) {
@@ -205,26 +205,6 @@ const playState = (callback) => {
         if (bomber2Ready) {
             ctx.drawImage(bomber2Image, team1Car.x, initialHeight)
         }
-
-        // Draw a square
-        ctx.beginPath();
-        ctx.fillStyle="#00A8C1";
-        ctx.fillRect(75, y,40,40);
-
-        // Draw a circle
-        ctx.beginPath();
-        ctx.arc(475,y,20,0,Math.PI*2);
-        ctx.fillStyle="#E9465F";
-        ctx.fill();
-
-        // move Y pos
-        y += 50;
-
-        // Score
-        ctx.fillStyle = "rgb(250, 250, 250)";
-        ctx.font = "24px Helvetica";
-        ctx.textAlign = "left";
-        ctx.textBaseline = "top";
     };
 
     const updatePlayersPosition = (data) => {
@@ -277,7 +257,7 @@ const playState = (callback) => {
     if (firstTime) {
         client.players[playerIndex] = data.players[playerIndex];
         client.players[playerIndex].number = data.players[playerIndex].number;
-        client.players[playerIndex].team = -data.players[playerIndex].team;
+        client.players[playerIndex].team = data.players[playerIndex].team;
         firstTime = false;
     }
 
