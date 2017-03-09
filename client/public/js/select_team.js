@@ -323,6 +323,11 @@ let selectTeamState = (callback) => {
     client.localplayer = data.localplayer;
     client.id = data.id;
     client.game_id = data.game_id;
+    alertify
+      .logPosition("bottom right")
+      .delay(0)
+      .closeLogOnClick(false)
+      .success("ID GAME: " + data.game_id);
     playerIndex = client.localplayer - 1;
 
     let player = client.players[playerIndex];

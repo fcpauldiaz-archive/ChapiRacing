@@ -122,7 +122,9 @@ const playState = (callbackPlay) => {
                 points: 0
             }
         ],
-        speed: 700
+        speed: 700,
+        speedObjects: 5,
+        timeInterval: 2
     };
     socket.emit('prepareState');
     socket.on('getNewState', (data) =>  {
@@ -195,8 +197,7 @@ const playState = (callbackPlay) => {
 
         //space bar or enter
         if ((32 in keysDown || 13 in keysDown) && !isRunner) {
-            console.log( Math.abs(updateDate.getSeconds() - actualDate.getSeconds()));
-            if ( Math.abs(updateDate.getSeconds() - actualDate.getSeconds()) > 2) {
+            if ( Math.abs(updateDate.getSeconds() - actualDate.getSeconds()) > client.timeInterval) {
                 let newImage = new Image();
                 const random = Math.random();
                 const bulletOrCoin = {
@@ -227,7 +228,7 @@ const playState = (callbackPlay) => {
         //update bulletsOrCoins
         for (let k = 0; k < client.bulletsOrCoins.length; k++) {
             let object = client.bulletsOrCoins[k];
-            object.y += 5;
+            object.y += client.speedObjects;
             if ((object.y >= carYPosition) && isRunner) {
                 let collition = calcCollition(client.players[playerIndex], object);
                 if (collition) {
@@ -406,8 +407,16 @@ const playState = (callbackPlay) => {
             addBulletsOrCoins(data.objects);
         });
         socket.emit('requestObjects', {});
-
-        setTimeout(function(){}, 15000);
+        if ((Math.abs(new Date().getSeconds() - gameTime.getSeconds())%30 === 0) && valid === true) {
+            console.log('increse speed');
+            client.speedObjects = client.speedObjects + 2;
+            client.timeInterval = client.timeInterval - 0.2;
+            valid = false;
+            updateTime = new Date();
+        }
+        if ((Math.abs(new Date().getSeconds() - updateTime.getSeconds())) >= 1) { 
+            valid = true;
+        }
         // Request to do this again ASAP
         requestAnimationFrame(mainPlayGame);
     };
@@ -418,6 +427,9 @@ const playState = (callbackPlay) => {
 
     // Let's play this game!
     let then = Date.now();
+    let gameTime = new Date();
+    let updateTime = new Date();
+    let valid = false;
 
     //connect to lobby
     // socket.on('onconnected', (data) => 
