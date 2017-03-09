@@ -1,14 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>ChapiRacing - Game</title>
-    </head>
-    <body style="text-align: center;">
+<html>
+<head>
+
+<title>CHAPI RACING</title>
+
+<!-- For-Mobile-Apps -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <script src="/socket.io/socket.io.js"></script>
+
+  <link rel="stylesheet" href="client/public/css/bootstrap.min.css" type="text/css" media="all"/>
+  <!-- Index-Page-Styling --> <link rel="stylesheet" href="client/public/css/style.css" type="text/css" media="all" />
+  <!-- Owl-Carousel-CSS --> <link rel="stylesheet" href="client/public/css/owl.carousel.css" type="text/css" media="all"/>
+  <!-- Popup-Box-CSS --> <link rel="stylesheet" href="client/public/css/popuo-box.css" type="text/css" media="all"/>
+<!-- //Custom-Stylesheet-Links -->
+
+<!-- Web-Fonts -->
+  <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Racing+Sans+One' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,500,600,700,800,900' rel='stylesheet' type='text/css'>
+<!-- //Web-Fonts -->
+
+</head>
+<body style="text-align: center">
+
+  <!-- Header -->
+  <div class="header" id="delete">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">CHAPI RACING</a>
+        </div>
+      </div>
+    </nav>
+    <!-- //Navbar -->
+  </div>
+  <!-- //Header -->
+  <!-- Contact -->
+  <div class="contact" id="contact">
+    <div class="container">
+
+      <h3>CHAPI SERVER</h3>
+      <div class="heading-underline"></div>
+
+      <form class="contact_form">
+
+        <div class="message">
+          <div class="col-md-6 col-sm-6 grid_6 c1">
+            <input type="text" id="id_server" class="text" placeholder="ID SERVER" required="" >
+             <input type="submit" id="join" class="more_btn" value="JOIN GAME">
+          </div>
+
+          <div class="col-md-6 col-sm-6 grid_6 c1">
+            <input id="create" type="submit" class="big_button" value="CREATE NEW GAME">
+          </div>
+          <div class="clearfix"></div>
+         
+        </div>
+      </form>
+
+    </div>
+  </div>
+  <!-- //Contact -->
+
+  <!-- Footer -->
+  <div class="footer" id="footer">
+    <div class="container">
+
+      <div class="connect">
+        <div class="connect-social">
+          <h4>Newton Labs</h4>
+          <h4>Universidad del Valle de Guatemala 2017</h4>
+          <ul>
+            <li><a href="http://facebook.com/newtonlabsgt" class="facebook" title="Go to Our Facebook Page"></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="copyright">
+        <p>&copy; 2017 CHAPI RACING</p>
+      </div>
+
+    </div>
+  </div>
+  <!-- //Footer -->
+
+  <!--GAME-->
+    <div style="float: right; visibility: hidden" id="game">
+            <div style="text-align: center;">
+                <h1>Instructions</h1>
+                <p id="inst">Please press 'Enter' when ready</p>
+                <hr>
+
+                <h1>Information</h1>
+                <p id="info"></p>
+
+                <hr>
+                <h1>Status</h1>
+                <p id="stats"></p>
+
+                <hr>
+                <h1>debug</h1>
+                <p id="debug"></p>
+            </div>
+        </div>
+        <!-- Canvas -->
         <div id="canvasContainer">
             <canvas id="canvas"></canvas>
         </div>
 
-        <script src="js/chapiracingplay.js"></script>
-    </body>
+  <script type="text/javascript" src="client/public/js/jquery.min.js"></script>
+  <!-- Necessary-JS-File-For-Bootstrap --> <script type="text/javascript" src="client/public/js/bootstrap.min.js"></script>
+  <script src="client/public/js/init.js"></script>
+  <script src="/dependencies/stats.min.js"></script>
+  <script src="client/public/js/chapiracingplay.js"></script>
+  <script src="client/public/js/clientState.js"></script>
+  <script src="client/public/js/select_team.js"></script>
+  <script src="http://wzrd.in/standalone/uuid@latest"></script>
+
+
+</body>
 </html>
