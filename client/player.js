@@ -15,6 +15,10 @@ export default class Player  {
     this.type = type;
   }
 
+  getPlayerType() {
+    return this.type;
+  }
+
   getPlayerId() {
     return this.playerId;
   }

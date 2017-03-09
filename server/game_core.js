@@ -122,4 +122,11 @@ export default class Game {
     return -1; //should get here, error
   }
 
+  changeSides() {
+    for (let i = 0; i < this.players.length; i++) {
+      let player = this.player[i];
+      player.setPlayerType(player.getPlayerType() === 'car'? 'bomber':'car');
+    }
+  }
+
 }

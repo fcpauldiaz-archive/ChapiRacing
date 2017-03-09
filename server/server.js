@@ -201,3 +201,13 @@ serverGame.sendNewState = function(game_id) {
   }
 }
 
+serverGame.changeSides = function(game_id) {
+  for (let i = 0; i< this.games.length; i++) {
+    let game = this.games[i];
+    if (game.getId() === game_id) {
+      game.changeSides();
+      return players;
+    }
+  }
+}
+
