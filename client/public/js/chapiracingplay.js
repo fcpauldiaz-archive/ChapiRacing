@@ -201,7 +201,7 @@ const playState = (callbackPlay) => {
                 let newImage = new Image();
                 const random = Math.random();
                 const bulletOrCoin = {
-                    x: client.players[playerIndex].x,
+                    x: client.players[playerIndex].x + 42,
                     y: initialHeight,
                     image: newImage,
                     id: uuid.v4()
