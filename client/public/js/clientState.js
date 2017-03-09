@@ -1,5 +1,4 @@
-const socket = io('http://localhost:4004');
-
+//const socket = io();
 let state = {
     actualState: 1,
     actualStateString: 'selectTeam',
@@ -12,6 +11,10 @@ const getState = () => {
 const getCurrentState = () => {
     return state.actualState;
 };
+
+const setNewClient = (newClient) => {
+    state.client.players = newClient;
+}
 
 const setState = (actualState) => {
     let stateString = '';
@@ -42,21 +45,32 @@ socket.on('onconnected', (data) => {
     state.client.game_id = data.game_id;
     console.log(state.client);
 
-    if (getCurrentState() === 1) {
-        selectTeamState(callback);
-    }
+    main();
 });
 
-const callback = (client) => {
+const selectTeamCallback = (client) => {
     state.client = client;
     setState(2);
+    console.log('callback activated ' + state.actualStateString);
+    socket.emit('play', { 
+        play: true
+    });
+    main();
 };
 
-// const selectTeam = () => {
-//     var gamedata = selectTeamState(callback);
-//     if (gamedata) {
-//         console.log('Ya terminaron de seleccionar equipos');
-//     }
-// };
+const playCallback = (data) => {
+    console.log(data);
+}
 
-// selectTeam();
+const main = () => {
+    if (getCurrentState() === 1) {
+        console.log("lets select the team");
+        selectTeamState(selectTeamCallback);
+    }
+
+    if (getCurrentState() === 2) {
+        console.log("lets play");
+        document.getElementById('canvasContainer').innerHTML = '<canvas id="canvas"></canvas>';
+        playState(playCallback);
+    }
+}

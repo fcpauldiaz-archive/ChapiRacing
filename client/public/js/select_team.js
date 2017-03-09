@@ -1,7 +1,9 @@
-let changeState = false;
-let selectTeamState = (callback) => {
 
-    let canvas = document.createElement("canvas");
+let enableCallback = false;
+let selectTeamState = (callback) => {
+    console.log('Select team JS file');
+    // let canvas = document.createElement("canvas");
+    let canvas = document.getElementById("canvas");
     let ctx = canvas.getContext("2d");
     // const socket = io('http://localhost:4004');
 
@@ -117,7 +119,7 @@ let selectTeamState = (callback) => {
     // Update: Funcion para tomar el movimiento atraves del teclado
     //      tiene como fin el seleccionar un equipo
     const update = (modifier) => {
-        console.log(client.players);
+        // console.log(client.players);
         actual_team = client.players[playerIndex].team;
         if (13 in keysDown && actual_team !== -1) {
             allowSelectTeam = false;
@@ -251,13 +253,15 @@ let selectTeamState = (callback) => {
     //update the other players position
     const updatePlayersPosition = (data) => {
         for (let i = 0; i < data.players.length; i++) {
-            client.players[data.players[i].number-1] = data.players[i];
+            client.players[data.players[i].number - 1] = data.players[i];
         }
     }
-
+    var loop = true;
     // The main game loop
     const main = () => {
+        if (loop) {
          stats.begin();
+        
 
         const now = Date.now();
         const delta = now - then;
@@ -280,14 +284,29 @@ let selectTeamState = (callback) => {
         } else {
             document.getElementById("stats").innerHTML = "Select a team!!";
         }
+
         //send client player position
         socket.emit('teamselect', { 
             player
         });
-        setTimeout(function(){}, 15000);
+
+        let playersNoTeam = getPlayersWithoutSelectedTeam();
+        document.getElementById('debug').innerHTML = 'Player no team: ' + playersNoTeam;
+        if (playersNoTeam === 0) {
+            if (!enableCallback) {
+                console.log('Finish' + playersNoTeam);
+                callback(client);
+                enableCallback = true;
+                document.getElementById('canvas').remove();
+                loop = false;
+            }
+        }
+
+       
         // Request to do this again ASAP
         stats.end();
         requestAnimationFrame(main);
+        }
     };
 
     // Cross-browser support for requestAnimationFrame
@@ -300,21 +319,19 @@ let selectTeamState = (callback) => {
     //connect to lobby
     // socket.on('onconnected', (data) => {
     let data = getState().client;
-    let playersNoTeam = getPlayersWithoutSelectedTeam();
-    if (playersNoTeam === 0) {
-        console.log('Finish' + playersNoTeam);
-        callback(client);
-    }
-    console.log(data);
+
     client.localplayer = data.localplayer;
-    client.id = data.player_id;
+    client.id = data.id;
     client.game_id = data.game_id;
+    alertify
+      .logPosition("bottom right")
+      .delay(0)
+      .closeLogOnClick(false)
+      .success("ID GAME: " + data.game_id);
     playerIndex = client.localplayer - 1;
-    console.log('Index: ' + playerIndex);
-    console.log('Client players');
-    console.log(client.players);
+
     let player = client.players[playerIndex];
-    console.log(player);
+    //console.log(player);
     //initialize players position on server
     socket.emit('teamselect', { 
         player
@@ -322,3 +339,4 @@ let selectTeamState = (callback) => {
     main();
     // });
 };
+//window.addEventListener('resize', selectTeamState, false);

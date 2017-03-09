@@ -23,7 +23,7 @@ app.get( '/', ( req, res ) => {
   if (debug) {
     console.log('loading %s', __dirname + '/index.html');
   }
-  res.sendFile( '/client/public/select_team.html' , { root:__dirname });
+  res.sendFile( '/client/public/index.html' , { root:__dirname });
 });
 
 
@@ -42,16 +42,9 @@ app.get( '/*' , ( req, res, next ) => {
 const io = socket.listen(server);
 const maxCons = 4;
 
-const getPlayerNumber = (before) => {
-  if (before === undefined) return 1;
-  if (before === maxCons) {
-    return 1;
-  }
-  return before + 1;
-}
 
- const game_server = require('./server/server.js');
- let playerNumber = undefined;
+const game_server = require('./server/server.js');
+ //let playerNumber = undefined;
   //Socket.io will make connections
 
 io.sockets.on('connection', (client) => {
@@ -59,26 +52,79 @@ io.sockets.on('connection', (client) => {
   //Generate a new UUID
   //and store this on their socket/connection
   client.userid = UUID();
-  playerNumber = getPlayerNumber(playerNumber);
-  client.player = playerNumber;
-  const game_id = game_server.findGame(client.userid, playerNumber);
-  client.game_id = game_id;
   console.log('\t socket.io:: player ' + client.userid + ' connected');
   //tell player he is connected with id
-  client.emit('onconnected', {  
-    player: client.player, 
-    player_id: client.userid,
-    game_id
-  });
+ 
+  client.on('createGame', () => {
+    const { game_id, player_number } = game_server.createGame(client.userid);
+    client.game_id = game_id;
+    client.emit('onconnected', {  
+      player: player_number, 
+      player_id: client.userid,
+      game_id
+    });
+  })
 
+  client.on('joinGame', (data) => {
+    const { game_id, player_number } = game_server.findGame(client.userid, data.id_server);
+    client.game_id = game_id;
+    client.emit('onconnected', {  
+      player: player_number, 
+      player_id: client.userid,
+      game_id
+    });
+  })
+
+
+  //when player moves on team select
   client.on('teamselect', (data) => {
     game_server.updatePlayerPosition(data.player, client.userid);
     client.emit('updatePosition', {
      players: game_server.getPlayersPosition(client.game_id, client.userid)
     });
+  });
+
+  client.on('playerUpdate', (data) => {
+    game_server.updatePlayerPosition(data.player, client.userid);
+    client.emit('receiveUpdate', {
+     players: game_server.getPlayersFullPosition(client.game_id, client.userid)
+    });
+  });
+
+  client.on('getPlayerType', () => {
+    client.emit('sendPlayerType', {
+      type: game_server.getPlayerType(client.game_id, client.userid)
+    })
   })
 
+  client.on('requestState', () => {
+    client.emit('getNewState', {
+      players: game_server.sendNewState(client.game_id)
+    })
+  });
+
+  client.on('prepareState', () => {
+    game_server.prepareNewState(client.game_id);
+  });
   
+  client.on('addObject', (data) => {
+    game_server.addNewObject(client.game_id, data.bulletOrCoin);
+    client.emit('broadCastObject', {
+      objects: game_server.broadCastObjects(client.game_id)
+    })
+  });
+
+  client.on('requestObjects', () => {
+    client.emit('updateBrodcast', {
+      objects: game_server.broadCastObjects(client.game_id)
+    })
+  })
+  
+  client.on('removeObject', (data) => {
+    client.emit('removeBroadcast', {
+      object_id: game_server.removeObject(client.game_id, data.objectId)
+    });
+  })
 
   // Add a disconnect listener
   client.on('disconnect', () => {

@@ -1,43 +1,81 @@
-var Player = function(id, player) {
-  this.playerId = id;
-  this.playerNumber =  player;
-  this.playerTeam =  -1;
-  this.playerPoints =  0;
-  this.posx;
-  this.posy;
+export default class Player  {
+  constructor(id, number) {
+    //console.log(number, 'player number');
+    this.playerId = id;
+    this.number = number;
+    this.team =  -1;
+    this.teamSelected = false;
+    this.points =  0;
+    this.type = '';
+    this.x;
+    this.y;
+  }
 
-  Player.prototype.getPlayerId = function() {
+  setPlayerType(type) {
+    this.type = type;
+  }
+
+  getPlayerId() {
     return this.playerId;
   }
 
-  Player.prototype.getPlayerNumber = function() {
-    return this.playerNumber;
+  getPlayerNumber() {
+    return this.number;
   }
 
-  Player.prototype.getTeam = function() {
-    return this.playerTeam;
+  getTeam() {
+    return this.team;
   };
 
-  Player.prototype.setTeam = function(team) {
-    this.playerTeam = team;
+  setTeam(team) {
+    this.team = team;
   };
 
-  Player.prototype.increasePoints = function() {
-    this.playerPoints =+ 1;
+  increasePoints() {
+    this.points =+ 1;
   };
 
-  Player.prototype.getPoints = function() {
-    return this.playerPoints;
+  getPoints() {
+    return this.points;
   };
 
-  Player.prototype.updatePos = function(x, y) {
-    this.posx = x;
-    this.posy = y;
+  updatePos(x) {
+    this.x = x;
   }
 
-  Player.prototype.getPos = function() {
-    return {x: this.posx, y: this.posy};
+  getPos() {
+    return {x: this.x, y: this.y};
   }
+
+  setTeamSelected(selected) {
+    this.teamSelected = selected;
+  };
+
+  getTeamSelected() {
+    return this.teamSelected;
+  }
+
+  setInitialX() {
+    if (this.team === 1 && this.type === 'car') {
+      this.x = 65;
+      return;
+    }
+    if (this.team === 2 && this.type === 'car') { //team 2 car
+      this.x =  450;
+      return;
+    }
+    if (this.team === 1 && this.type === 'bomber') {
+      this.x =  440;
+      return
+    }
+    if  (this.team === 2 && this.type === 'bomber'){
+      this.x =  55;
+      return;
+    }
+    console.log(this.team)
+    console.log(this.type);
+    console.log('no debería llegar aqui');
+  }
+
+
 }
-
-module.exports = Player;
