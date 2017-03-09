@@ -159,6 +159,7 @@ serverGame.removeObject = function(game_id, object_id) {
     let game = this.games[i];
     if (game.getId() === game_id) {
       game.removeObject(object_id);
+      return object_id;
     }
   }
 }

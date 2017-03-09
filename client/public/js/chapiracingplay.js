@@ -234,6 +234,10 @@ const playState = (callbackPlay) => {
                     var objectId = object.id;
                     if (objectId !== '') {
                         socket.emit('removeObject', {objectId});
+                         //receive objects
+                        socket.on('removeBroadcast', (data) => {
+                            removeBulletsOrCoints(data.object_id);
+                        });
                     }
                     objectId = '';
                 }
@@ -341,14 +345,12 @@ const playState = (callbackPlay) => {
         for (let i = 0; i < data.players.length; i++) {
             client.players[data.players[i].number-1].x = data.players[i].x;
         }
-        // console.log(client.players);
         calculatePlayersIndexToRender();
     }
 
     const addBulletsOrCoins = (data) => {
         let actualBOCid = '';
         const filterBullet = (e) => {
-            // console.log('compare: ' + e.id + ' to ' + actualBOCid);
             if (e.id === actualBOCid) {
                 return true;
             }
@@ -356,7 +358,6 @@ const playState = (callbackPlay) => {
         data.forEach((bulletOrCoin) => {
             actualBOCid = bulletOrCoin.id;
             let find = client.bulletsOrCoins.filter(filterBullet);
-            // console.log(find);
             let isIn = (find.length >= 1) ? true : false;
             if (!isIn) {
                 var imageLocal = new Image();
@@ -370,6 +371,15 @@ const playState = (callbackPlay) => {
             }
         });
     };
+
+    const removeBulletsOrCoints = (object_id) => {
+        for (let i = 0; i < client.bulletsOrCoins.length; i++) {
+            if (client.bulletsOrCoins[i].id === object_id) {
+                client.bulletsOrCoins.splice(i, 1);
+                return;
+            }
+        }
+    }
 
     // The main game loop
     let mainPlayGame = function () {
