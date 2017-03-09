@@ -126,6 +126,10 @@ io.sockets.on('connection', (client) => {
     });
   })
 
+  client.on('changeSides', => {
+    game_server.changeSides(client.game_id);
+  });
+
   // Add a disconnect listener
   client.on('disconnect', () => {
     console.log('client disconnected ' + client.userid);
