@@ -200,7 +200,8 @@ const playState = (callbackPlay) => {
                 const bulletOrCoin = {
                     x: client.players[playerIndex].x,
                     y: initialHeight,
-                    image: newImage
+                    image: newImage,
+                    id: uuid.v4()
                 }
                 //draw bullet
                 if (random >= 0.5) {
@@ -225,6 +226,12 @@ const playState = (callbackPlay) => {
         for (let k = 0; k < client.bulletsOrCoins.length; k++) {
             let object = client.bulletsOrCoins[k];
             object.y += 5;
+            // if (y <= carYPosition) {
+            //     let collition = calcCollition(client.players[playerIndex], object);
+            //     if (collition) {
+            //         console.log('LOL');
+            //     }
+            // }
         }
 
         if (client.players[playerIndex].x <= windowLeftLimit) {
@@ -346,7 +353,14 @@ const playState = (callbackPlay) => {
             // console.log(find);
             let isIn = (find.length >= 1) ? true : false;
             if (!isIn) {
+                var imageLocal = new Image();
+                imageLocal.src = "client/public/images/bombSmall.png";
+                if (bulletOrCoin.type === 'coin') {
+                    imageLocal.src = "client/public/images/coinSmall.png";
+                }
+                bulletOrCoin.image = imageLocal;
                 client.bulletsOrCoins.push(bulletOrCoin);
+
             }
         });
     };
