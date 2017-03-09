@@ -291,10 +291,8 @@ let selectTeamState = (callback) => {
         });
 
         let playersNoTeam = getPlayersWithoutSelectedTeam();
-        console.log(playersNoTeam);
         document.getElementById('debug').innerHTML = 'Player no team: ' + playersNoTeam;
         if (playersNoTeam === 0) {
-            console.log(enableCallback);
             if (!enableCallback) {
                 console.log('Finish' + playersNoTeam);
                 callback(client);
