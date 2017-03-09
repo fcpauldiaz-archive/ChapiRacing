@@ -46,12 +46,12 @@ serverGame.findGame = function(playerId, game_id) {
   }
   //find for an existing game
   for (let i = 0; i < this.games.length; i++) {
-    if (this.games[i].getId() === game_id) {
+    //if (this.games[i].getId() === game_id) {
       const count = this.games[i].getPlayerCount();
       if (count <= 3) {
         return this.joinGame(i, playerId);
       }
-    }
+    //}
   }
   //if all games are full
   return this.createGame(playerId);
