@@ -23,7 +23,7 @@ app.get( '/', ( req, res ) => {
   if (debug) {
     console.log('loading %s', __dirname + '/index.html');
   }
-  res.sendFile( '/client/public/select_team.html' , { root:__dirname });
+  res.sendFile( '/client/public/index.html' , { root:__dirname });
 });
 
 
@@ -52,17 +52,30 @@ io.sockets.on('connection', (client) => {
   //Generate a new UUID
   //and store this on their socket/connection
   client.userid = UUID();
-  //playerNumber = getPlayerNumber(playerNumber);
-  //client.player = playerNumber;
-  const { game_id, player_number } = game_server.findGame(client.userid);
-  client.game_id = game_id;
   console.log('\t socket.io:: player ' + client.userid + ' connected');
   //tell player he is connected with id
-  client.emit('onconnected', {  
-    player: player_number, 
-    player_id: client.userid,
-    game_id
-  });
+ 
+  client.on('createGame', () => {
+    const { game_id, player_number } = game_server.createGame(client.userid);
+    client.game_id = game_id;
+    client.emit('onconnected', {  
+      player: player_number, 
+      player_id: client.userid,
+      game_id
+    });
+  })
+
+  client.on('joinGame', (data) => {
+    const { game_id, player_number } = game_server.findGame(client.userid, data.id_server);
+    client.game_id = game_id;
+    client.emit('onconnected', {  
+      player: player_number, 
+      player_id: client.userid,
+      game_id
+    });
+  })
+
+
   //when player moves on team select
   client.on('teamselect', (data) => {
     game_server.updatePlayerPosition(data.player, client.userid);

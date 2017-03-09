@@ -1,5 +1,4 @@
-const socket = io();
-
+//const socket = io();
 let state = {
     actualState: 1,
     actualStateString: 'selectTeam',
@@ -72,8 +71,6 @@ const main = () => {
     if (getCurrentState() === 2) {
         console.log("lets play");
         document.getElementById('canvasContainer').innerHTML = '<canvas id="canvas"></canvas>';
-        // console.log('newState');
-        // console.log(getState().client);
         playState(playCallback);
     }
 }

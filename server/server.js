@@ -39,16 +39,18 @@ serverGame.leaveGame = function(i, indexPlayer) {
   this.games[i].removePlayer(indexPlayer);
 }
 
-serverGame.findGame = function(playerId) {
+serverGame.findGame = function(playerId, game_id) {
   //create first game
   if (this.game_count === 0) {
     return this.createGame(playerId);
   }
   //find for an existing game
   for (let i = 0; i < this.games.length; i++) {
-    const count = this.games[i].getPlayerCount();
-    if (count <= 3) {
-      return this.joinGame(i, playerId);
+    if (this.games[i].getId() === game_id) {
+      const count = this.games[i].getPlayerCount();
+      if (count <= 3) {
+        return this.joinGame(i, playerId);
+      }
     }
   }
   //if all games are full
