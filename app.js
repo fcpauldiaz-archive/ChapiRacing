@@ -56,6 +56,7 @@ io.sockets.on('connection', (client) => {
   //client.player = playerNumber;
   const { game_id, player_number } = game_server.findGame(client.userid);
   client.game_id = game_id;
+  console.log(game_server.games);
   console.log('\t socket.io:: player ' + client.userid + ' connected');
   //tell player he is connected with id
   client.emit('onconnected', {  
@@ -108,12 +109,15 @@ io.sockets.on('connection', (client) => {
     })
   })
   
+  client.on('removeObject', (data) {
+    game_server.removeObject(data.id);
+  })
 
   // Add a disconnect listener
   client.on('disconnect', () => {
     console.log('client disconnected ' + client.userid);
     game_server.endGame(client.userid);
-    //console.log(game_server.games);
+    console.log(game_server.games);
   });
 
 }); //client.on 
