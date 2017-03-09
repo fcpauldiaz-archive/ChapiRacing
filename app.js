@@ -109,8 +109,10 @@ io.sockets.on('connection', (client) => {
     })
   })
   
-  client.on('removeObject', (data) {
-    game_server.removeObject(data.id);
+  client.on('removeObject', (data) => {
+    console.log('Remove');
+    console.log(data);
+    game_server.removeObject(client.game_id, data.objectId);
   })
 
   // Add a disconnect listener

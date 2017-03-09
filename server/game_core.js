@@ -64,7 +64,7 @@ export default class Game {
 
   removeObject(object_id) {
     for (let i = 0; i < this.objectsArray.length; i++) {
-      object = this.objectsArray[i];
+      const object = this.objectsArray[i];
       if (object.getId() === object_id) {
         //remove object from array
         this.objectsArray.splice(i, 1);

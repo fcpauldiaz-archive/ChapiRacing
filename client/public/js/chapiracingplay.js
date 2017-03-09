@@ -1,7 +1,9 @@
 const calcCollition = (player, object) => {
     // Image runner is 66px width and Xpos is the middle so
     // we have a left and right range.
-
+    if (object.y >= window.innerHeight) {
+        return false;
+    }
     // Same for the object, the object is 126px
     // Can't be less than 0
     let leftPlayerX = ((player.x - 33) <= 0) ? 0 : (player.x - 33);
@@ -226,12 +228,16 @@ const playState = (callbackPlay) => {
         for (let k = 0; k < client.bulletsOrCoins.length; k++) {
             let object = client.bulletsOrCoins[k];
             object.y += 5;
-            // if (y <= carYPosition) {
-            //     let collition = calcCollition(client.players[playerIndex], object);
-            //     if (collition) {
-            //         console.log('LOL');
-            //     }
-            // }
+            if ((object.y >= carYPosition) && isRunner) {
+                let collition = calcCollition(client.players[playerIndex], object);
+                if (collition) {
+                    var objectId = object.id;
+                    if (objectId !== '') {
+                        socket.emit('removeObject', {objectId});
+                    }
+                    objectId = '';
+                }
+            }
         }
 
         if (client.players[playerIndex].x <= windowLeftLimit) {
