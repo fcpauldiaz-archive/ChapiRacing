@@ -163,6 +163,20 @@ const playState = (callbackPlay) => {
         team2Car.y = carYPosition;
     };
 
+    const getTeamPoints = (team)  => {
+        let points = 0;
+        client.players.forEach((e) => {
+            console.log('team a buscar ' + team);
+            console.log('playerTeam: ' + e.team);
+            if (e.team === team) {
+                points += e.points;
+                console.log(points);
+            }
+        });
+
+        return points;
+    }
+
     // Update game objects
     var update = function (modifier, updateDate) {
         // If team 1:
@@ -197,7 +211,7 @@ const playState = (callbackPlay) => {
 
         //space bar or enter
         if ((32 in keysDown || 13 in keysDown) && !isRunner) {
-            if ( Math.abs(updateDate.getSeconds() - actualDate.getSeconds()) > client.timeInterval) {
+            if (Math.abs(updateDate.getSeconds() - actualDate.getSeconds()) > client.timeInterval) {
                 let newImage = new Image();
                 const random = Math.random();
                 const bulletOrCoin = {
@@ -235,7 +249,21 @@ const playState = (callbackPlay) => {
                     var objectId = object.id;
                     if (objectId !== '') {
                         socket.emit('removeObject', {objectId});
-                         //receive objects
+                        // Si el objeto es de tipo COIN
+                        if (object.type === 'coin') {
+                            // Variable lock para que bloquee este proceso y no repita
+                            // hasta nuevo evento
+                            var lock = 0;
+                            if (lock == 0) {
+                                // console.log('add point');
+                                client.players[playerIndex].points += 1;
+
+                                // document.getElementById("scoreHeader").innerHTML = "Team: " + player.team;
+                                document.getElementById("score").innerHTML = "Points: " + getTeamPoints(client.players[playerIndex].team);
+                                // console.log('points: ' + client.players[playerIndex].points);
+                                lock = 1;
+                            }
+                        }
                         socket.on('removeBroadcast', (data) => {
                             removeBulletsOrCoints(data.object_id);
                         });
@@ -393,6 +421,8 @@ const playState = (callbackPlay) => {
         render();
         then = now;
         let player = client.players[playerIndex];
+        document.getElementById("scoreHeader").innerHTML = "Team: " + player.team;
+        document.getElementById("score").innerHTML = "Points: " + getTeamPoints(player.team);
         // get players position
         socket.on('receiveUpdate', (data) => {
              updatePlayersPosition(data);
