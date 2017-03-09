@@ -1,27 +1,30 @@
 import UUID from 'uuid';
 
-export const FallingObject = (posx, posy) => {
-  this.id = UUID();
-  this.type
-  this.posx = posx;
-  this.posy = posy;
+export default class FallingObject {
 
-  getId = () => {
+  constructor(object) {
+    this.id = object.id;
+    this.type = object.type;
+    this.x = object.x;
+    this.y = object.y;
+  }
+  
+  getId() {
     return this.id;
   }
 
-  getType = () => {
+  getType() {
     return this.type;
   }
-  setType = (type) => {
-    this.type = type
+  setType(type){
+    this.type = type;
   }
-  updatePos = (x, y) => {
-    this.posx = x;
-    this.posy = y;
+  updatePos(x, y){
+    this.x = x;
+    this.y = y;
   }
-  getPos = () => {
-    return {x: this.posx, y: this.posy};
+  getPos() {
+    return {x: this.x, y: this.y};
   }
 
 

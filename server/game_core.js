@@ -1,4 +1,5 @@
 import Player from '../client/player';
+import FallingObject from '../client/fallingObject';
 
 export default class Game {
   constructor(id, players, playerCount)  {
@@ -59,12 +60,13 @@ export default class Game {
 
   addObject(object) {
     console.log(object);
-    this.objectsArray.push(object);
+    this.objectsArray.push(new FallingObject(object));
   }
 
   removeObject(object_id) {
     for (let i = 0; i < this.objectsArray.length; i++) {
       const object = this.objectsArray[i];
+      console.log(object);
       if (object.getId() === object_id) {
         //remove object from array
         this.objectsArray.splice(i, 1);

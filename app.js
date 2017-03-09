@@ -97,7 +97,6 @@ io.sockets.on('connection', (client) => {
   
   client.on('addObject', (data) => {
     game_server.addNewObject(client.game_id, data.bulletOrCoin);
-    console.log(game_server.broadCastObjects(client.game_id));
     client.emit('broadCastObject', {
       objects: game_server.broadCastObjects(client.game_id)
     })
@@ -119,7 +118,6 @@ io.sockets.on('connection', (client) => {
   client.on('disconnect', () => {
     console.log('client disconnected ' + client.userid);
     game_server.endGame(client.userid);
-    console.log(game_server.games);
   });
 
 }); //client.on 

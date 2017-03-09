@@ -78,13 +78,10 @@ serverGame.updatePlayerPosition = function(playerUpdate, user_id) {
     let game = this.games[i];
     for (let j = 0; j < game.getPlayers().length; j++) {
       let player = game.findPlayer(j);
-      //console.log(player);
       if (player.getPlayerId() === user_id) {
         player.updatePos(playerUpdate.x);
         player.setTeam(playerUpdate.team);
         player.setTeamSelected(playerUpdate.teamSelected);
-        //console.log(player + 'update position');
-        //console.log(payerUpdate.teamSelected);
       }
     }//end inner for
   }//end outer for
