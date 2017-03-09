@@ -129,6 +129,7 @@ const playState = (callbackPlay) => {
     socket.emit('prepareState');
     socket.on('getNewState', (data) =>  {
         client.players = data.players;
+        console.log(client.players);
     });
     socket.emit('requestState');
 
@@ -166,11 +167,11 @@ const playState = (callbackPlay) => {
     const getTeamPoints = (team)  => {
         let points = 0;
         client.players.forEach((e) => {
-            console.log('team a buscar ' + team);
-            console.log('playerTeam: ' + e.team);
+            //console.log('team a buscar ' + team);
+            //console.log('playerTeam: ' + e.team);
             if (e.team === team) {
                 points += e.points;
-                console.log(points);
+                //console.log(points);
             }
         });
 
@@ -211,6 +212,7 @@ const playState = (callbackPlay) => {
 
         //space bar or enter
         if ((32 in keysDown || 13 in keysDown) && !isRunner) {
+            console.log(client);
             if (Math.abs(updateDate.getSeconds() - actualDate.getSeconds()) > client.timeInterval) {
                 let newImage = new Image();
                 const random = Math.random();
@@ -263,6 +265,9 @@ const playState = (callbackPlay) => {
                                 // console.log('points: ' + client.players[playerIndex].points);
                                 lock = 1;
                             }
+                        }
+                        else {
+                            socket.emit('changeSides', {});
                         }
                         socket.on('removeBroadcast', (data) => {
                             removeBulletsOrCoints(data.object_id);
@@ -372,7 +377,7 @@ const playState = (callbackPlay) => {
 
     const updatePlayersPosition = (data) => {
         for (let i = 0; i < data.players.length; i++) {
-            client.players[data.players[i].number-1].x = data.players[i].x;
+            client.players[data.players[i].number-1] = data.players[i];
         }
         calculatePlayersIndexToRender();
     }
@@ -423,6 +428,23 @@ const playState = (callbackPlay) => {
         let player = client.players[playerIndex];
         document.getElementById("scoreHeader").innerHTML = "Team: " + player.team;
         document.getElementById("score").innerHTML = "Points: " + getTeamPoints(player.team);
+        socket.on('updateChangePosition', (data) => {
+            if (data.winner === true) {
+                 alertify
+                  .logPosition("bottom right")
+                  .delay(0)
+                  .closeLogOnClick(false)
+                  .success("winner team1");
+            }
+            if (data.winner === false) {
+                alertify
+                  .logPosition("bottom right")
+                  .delay(0)
+                  .closeLogOnClick(false)
+                  .success("winner team2");
+            }
+            
+        });
         // get players position
         socket.on('receiveUpdate', (data) => {
              updatePlayersPosition(data);
@@ -480,5 +502,6 @@ const playState = (callbackPlay) => {
     calculatePlayersIndexToRender();
     let actualDate = new Date();
     //socket.emit('getPlayerType', {});
+    
     mainPlayGame();
 }

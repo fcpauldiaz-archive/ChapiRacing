@@ -41,22 +41,26 @@ let selectTeamState = (callback) => {
                 number: 1,
                 team: -1,
                 x: 390,
-                teamSelected: false
+                teamSelected: false,
+                points: 0
             }, {
                 number: 2,
                 team: -1,
                 x: 390,
-                teamSelected: false
+                teamSelected: false,
+                points: 0
             }, {
                 number: 3,
                 team: -1,
                 x: 390,
-                teamSelected: false
+                teamSelected: false,
+                points: 0
             }, {
                 number: 4,
                 team: -1,
                 x: 390,
-                teamSelected: false
+                teamSelected: false,
+                points: 0
             }
         ],
         speed: 700

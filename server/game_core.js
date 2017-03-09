@@ -11,6 +11,7 @@ export default class Game {
     this.objectsArray = [];
     this.playerCount = playerCount;
     this.typesValid = false;
+    this.switch = false;
   }
   
   getId() {  
@@ -19,6 +20,13 @@ export default class Game {
 
   setTypesValid() {
     this.typesValid = true;
+  }
+
+  getSwitch() {
+    return this.switch;
+  }
+  switchGame() {
+    this.switch = true;
   }
 
   getValid() {
@@ -123,10 +131,34 @@ export default class Game {
   }
 
   changeSides() {
-    for (let i = 0; i < this.players.length; i++) {
-      let player = this.player[i];
-      player.setPlayerType(player.getPlayerType() === 'car'? 'bomber':'car');
+    if (this.switch === true) {
+      return false;
     }
+    for (let i = 0; i < this.players.length; i++) {
+      let player = this.players[i];
+      player.setPlayerType(player.getPlayerType() === 'car'? 'bomber':'car');
+      player.setInitialX();
+    }
+    this.switch = true;
+    return true;
+  }
+
+  getTeamWinner() {
+    let team1 = 0;
+    let team2 = 0;
+    for (let i = 0; i < this.players.length; i++) {
+      const player = this.players[i];
+      if (player.team === 1) {
+        team1 += player.getPoints();
+      }
+      if (player.team === 2) {
+        team2 += player.getPoints();
+      }
+    }
+    console.log(team1);
+    console.log(team2);
+    //true wins team 1, false team2
+    return team1 > team2? true: false;
   }
 
 }

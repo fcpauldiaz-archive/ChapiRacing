@@ -5,7 +5,7 @@ export default class Player  {
     this.number = number;
     this.team =  -1;
     this.teamSelected = false;
-    this.points =  0;
+    this.points = -1;
     this.type = '';
     this.x;
     this.y;
@@ -38,6 +38,10 @@ export default class Player  {
   increasePoints() {
     this.points =+ 1;
   };
+
+  setPoints(points) {
+    this.points = points;
+  }
 
   getPoints() {
     return this.points;

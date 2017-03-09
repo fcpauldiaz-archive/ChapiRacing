@@ -126,8 +126,15 @@ io.sockets.on('connection', (client) => {
     });
   })
 
-  client.on('changeSides', => {
-    game_server.changeSides(client.game_id);
+  client.on('changeSides', () => {
+    const winner =  game_server.changeSides(client.game_id);
+    client.broadcast.emit('updateChangePosition', {
+      winner
+    });
+    client.emit('updateChangePosition', {
+      players: game_server.sendNewState(client.game_id),
+      winner
+    });
   });
 
   // Add a disconnect listener

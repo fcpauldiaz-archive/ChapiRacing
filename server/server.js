@@ -84,6 +84,7 @@ serverGame.updatePlayerPosition = function(playerUpdate, user_id) {
         player.updatePos(playerUpdate.x);
         player.setTeam(playerUpdate.team);
         player.setTeamSelected(playerUpdate.teamSelected);
+        player.setPoints(playerUpdate.points);
       }
     }//end inner for
   }//end outer for
@@ -104,6 +105,7 @@ serverGame.getPlayersPosition = function(game_id, user_id) {
           playerObj.number = player.getPlayerNumber();
           playerObj.team = player.getTeam();
           playerObj.teamSelected = player.getTeamSelected();
+          playerObj.points = player.getPoints();
           players.push(playerObj);
         }
       }//end inner for
@@ -205,8 +207,7 @@ serverGame.changeSides = function(game_id) {
   for (let i = 0; i< this.games.length; i++) {
     let game = this.games[i];
     if (game.getId() === game_id) {
-      game.changeSides();
-      return players;
+      return game.getTeamWinner();
     }
   }
 }
