@@ -175,7 +175,6 @@ let selectTeamState = (callback) => {
         }
 
         if ((37 in keysDown || 39 in keysDown) && change_team) {
-          console.log(client);
           change_team = false;
         }
     };

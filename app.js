@@ -52,7 +52,9 @@ io.sockets.on('connection', (client) => {
   //Generate a new UUID
   //and store this on their socket/connection
   client.userid = UUID();
-  console.log('\t socket.io:: player ' + client.userid + ' connected');
+  if (debug) {
+    console.log('\t socket.io:: player ' + client.userid + ' connected');
+  }
   //tell player he is connected with id
  
   client.on('createGame', () => {
@@ -139,7 +141,9 @@ io.sockets.on('connection', (client) => {
 
   // Add a disconnect listener
   client.on('disconnect', () => {
-    console.log('client disconnected ' + client.userid);
+    if (debug) {
+      console.log('client disconnected ' + client.userid);
+    }
     game_server.endGame(client.userid);
   });
 
