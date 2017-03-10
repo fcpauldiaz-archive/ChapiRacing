@@ -429,19 +429,21 @@ const playState = (callbackPlay) => {
         document.getElementById("scoreHeader").innerHTML = "Team: " + player.team;
         document.getElementById("score").innerHTML = "Points: " + getTeamPoints(player.team);
         socket.on('updateChangePosition', (data) => {
-            if (data.winner === true) {
+            if (data.winner === true && finish === false) {
                  alertify
                   .logPosition("bottom right")
                   .delay(0)
                   .closeLogOnClick(false)
                   .success("winner team1");
+                  finish = true;
             }
-            if (data.winner === false) {
+            if (data.winner === false && finish === false) {
                 alertify
                   .logPosition("bottom right")
                   .delay(0)
                   .closeLogOnClick(false)
                   .success("winner team2");
+                  finish = true;
             }
             
         });
@@ -461,8 +463,8 @@ const playState = (callbackPlay) => {
         socket.emit('requestObjects', {});
         if ((Math.abs(new Date().getSeconds() - gameTime.getSeconds())%30 === 0) && valid === true) {
             console.log('increse speed');
-            client.speedObjects = client.speedObjects + 2;
-            client.timeInterval = client.timeInterval - 0.2;
+            client.speedObjects = client.speedObjects + 4;
+            client.timeInterval = client.timeInterval - 0.5;
             valid = false;
             updateTime = new Date();
         }
@@ -489,7 +491,7 @@ const playState = (callbackPlay) => {
     console.log('getState');
     console.log(data);
     console.log(client);
-
+    let finish = false;
     client.localplayer = data.localplayer;
     client.id = data.id;
     client.game_id = data.game_id;
