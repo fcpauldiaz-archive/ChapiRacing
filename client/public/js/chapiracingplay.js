@@ -430,19 +430,20 @@ const playState = (callbackPlay) => {
         document.getElementById("score").innerHTML = "Points: " + getTeamPoints(player.team);
         socket.on('updateChangePosition', (data) => {
             if (data.winner === true && finish === false) {
-                 alertify
-                  .logPosition("bottom right")
-                  .delay(0)
-                  .closeLogOnClick(false)
-                  .success("winner team1");
+                alertify
+                  .alert("Team 1 Won", function() {
+                        console.log('winner');
+                        location.reload();
+                  });
                   finish = true;
             }
             if (data.winner === false && finish === false) {
                 alertify
-                  .logPosition("bottom right")
-                  .delay(0)
-                  .closeLogOnClick(false)
-                  .success("winner team2");
+                  .alert("Team 2 Won", function() {
+                        console.log('winner');
+                        location.reload();
+                  });
+
                   finish = true;
             }
             
